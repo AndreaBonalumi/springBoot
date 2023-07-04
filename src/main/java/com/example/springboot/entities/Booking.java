@@ -3,10 +3,7 @@ package com.example.springboot.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
-import net.bytebuddy.asm.Advice;
-
-import javax.xml.transform.sax.SAXResult;
+import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -24,10 +21,12 @@ public class Booking implements Serializable {
     @Basic(optional = false)
     private int status;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     @JoinColumn(referencedColumnName = "username")
     @JsonBackReference
     private User user;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     @JoinColumn(referencedColumnName = "plate")
     @JsonBackReference
     private Car car;

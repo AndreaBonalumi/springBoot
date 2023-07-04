@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,9 +23,9 @@ public class Car implements Serializable {
     @Basic(optional = false)
     private String color;
     @Basic(optional = false)
-    private String year;
+    private int year;
     @Basic(optional = false)
-    private String created;
+    private LocalDate created;
     @Basic(optional = false)
     private String description;
     @Basic
