@@ -12,7 +12,6 @@ import java.util.Set;
 public class User {
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String username;
     @Basic(optional = false)
     private String firstName;

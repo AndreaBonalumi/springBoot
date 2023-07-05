@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class Booking implements Serializable {
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Basic(optional = false)
     private LocalDate dateBookingStart;
@@ -22,12 +22,12 @@ public class Booking implements Serializable {
     private int status;
     @ManyToOne
     @EqualsAndHashCode.Exclude
-    @JoinColumn(referencedColumnName = "username")
+    @JoinColumn(name = "user_username", referencedColumnName = "username")
     @JsonBackReference
     private User user;
     @ManyToOne
     @EqualsAndHashCode.Exclude
-    @JoinColumn(referencedColumnName = "plate")
+    @JoinColumn(name = "car_plate", referencedColumnName = "plate")
     @JsonBackReference
     private Car car;
 }

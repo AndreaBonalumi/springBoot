@@ -14,7 +14,6 @@ import java.util.Set;
 public class Car implements Serializable {
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String plate;
     @Basic(optional = false)
     private String brand;
