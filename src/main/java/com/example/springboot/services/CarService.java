@@ -3,9 +3,10 @@ package com.example.springboot.services;
 import com.example.springboot.entities.Car;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CarService {
-    List<Car> getAll();
+    List<Car> findAll();
     Car getByPlate(String plate);
+    void insCar(Car car);
+    void delCar (Car car);
 }
