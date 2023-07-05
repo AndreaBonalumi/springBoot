@@ -28,7 +28,7 @@ public class CarController {
     public ResponseEntity<List<Car>> allCars() {
         logger.info("***** otteniamo tutto *******");
 
-        List<Car> cars = carService.findAll();
+        List<Car> cars = carService.getAll();
         if (cars.isEmpty()) {
             return new ResponseEntity<List<Car>>(cars, HttpStatus.NO_CONTENT);
         }
@@ -53,21 +53,34 @@ public class CarController {
     @PostMapping("insert")
     public ResponseEntity<Car> insertCar(@RequestBody Car car) {
 
-        if (carService.getByPlate(car.getPlate()) == null) {
-            logger.info("****** creazione auto con targa: " + car.getPlate() + " ************");
-        } else {
-            logger.info("******* modifichiamo l'auto di targa: " + car.getPlate() + " ************");
+        logger.info("****** creazione auto con targa: " + car.getPlate() + " ************");
+
+        if (carService.getByPlate(car.getPlate()) != null) {
+            logger.info("errore nel tipo di richiesta (POST)");
+            return new ResponseEntity<Car>(HttpStatus.BAD_REQUEST);
         }
 
         carService.insCar(car);
         return new ResponseEntity<Car>(new HttpHeaders(), HttpStatus.CREATED);
+    }
+    @PutMapping("edit")
+    public ResponseEntity<?> editCar(@RequestBody Car car) {
+        logger.info("****** modifica auto: " + car.getPlate() + " *********");
+
+        if(carService.getByPlate(car.getPlate()) == null) {
+            logger.info("inserire una targa valida per la modifica");
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        carService.insCar(car);
+        return new ResponseEntity<Car>(new HttpHeaders(), HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("delete/{plate}")
     public ResponseEntity<?> deleteCar(@PathVariable("plate") String plate) throws ItemNotFoundException {
         logger.info("********** eliminazione auto di targa: " + plate + " **********");
 
-        // per messaggi di completamento
+        // per messaggi di fine metodo
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +21,9 @@ public class User {
     @Basic(optional = false)
     private String password;
     @Basic(optional = false)
-    private String created;
-    @Basic(optional = false)
-    private String bd;
+    private LocalDate created;
+    @Basic
+    private LocalDate bd;
     @Basic(optional = false)
     private boolean admin;
     @Basic(optional = false)

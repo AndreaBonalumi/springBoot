@@ -1,7 +1,6 @@
 package com.example.springboot.exceptions;
 
 public class ItemNotFoundException extends Exception {
-    private static final long serialVersionUID = -5630320396706560376L;
     private String messaggio;
 
     public ItemNotFoundException() {

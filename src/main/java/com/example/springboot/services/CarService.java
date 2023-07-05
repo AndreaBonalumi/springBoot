@@ -5,7 +5,7 @@ import com.example.springboot.entities.Car;
 import java.util.List;
 
 public interface CarService {
-    List<Car> findAll();
+    List<Car> getAll();
     Car getByPlate(String plate);
     void insCar(Car car);
     void delCar (Car car);
