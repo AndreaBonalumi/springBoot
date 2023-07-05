@@ -5,9 +5,8 @@ import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,30 +15,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("api/car")
+@RequiredArgsConstructor
 public class CarController {
-    private static final Logger logger = LoggerFactory.getLogger(CarController.class);
-
-    @Autowired
-    private CarService carService;
+    private final CarService carService;
 
     @GetMapping(value = "all", produces = "application/json")
     public ResponseEntity<List<Car>> allCars() {
-        logger.info("***** otteniamo tutto *******");
+        log.info("***** otteniamo tutto *******");
 
         List<Car> cars = carService.getAll();
         if (cars.isEmpty()) {
             return new ResponseEntity<List<Car>>(cars, HttpStatus.NO_CONTENT);
         }
 
-        logger.info("numero di auto : " + cars.size());
+        log.info("numero di auto : " + cars.size());
         return new ResponseEntity<List<Car>>(cars, HttpStatus.OK);
     }
 
     @GetMapping(value = "id/{plate}", produces = "application/json")
     public ResponseEntity<Car> carByPlate(@PathVariable("plate") String plate) throws ItemNotFoundException {
-        logger.info("********* otteniamo solo una auto con targa: " + plate + " ***********");
+        log.info("********* otteniamo solo una auto con targa: " + plate + " ***********");
 
         Car car = carService.getByPlate(plate);
 
@@ -53,10 +51,10 @@ public class CarController {
     @PostMapping("insert")
     public ResponseEntity<Car> insertCar(@RequestBody Car car) {
 
-        logger.info("****** creazione auto con targa: " + car.getPlate() + " ************");
+        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
 
         if (carService.getByPlate(car.getPlate()) != null) {
-            logger.info("errore nel tipo di richiesta (POST)");
+            log.info("errore nel tipo di richiesta (POST)");
             return new ResponseEntity<Car>(HttpStatus.BAD_REQUEST);
         }
 
@@ -65,10 +63,10 @@ public class CarController {
     }
     @PutMapping("edit")
     public ResponseEntity<?> editCar(@RequestBody Car car) {
-        logger.info("****** modifica auto: " + car.getPlate() + " *********");
+        log.info("****** modifica auto: " + car.getPlate() + " *********");
 
         if(carService.getByPlate(car.getPlate()) == null) {
-            logger.info("inserire una targa valida per la modifica");
+            log.info("inserire una targa valida per la modifica");
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         carService.insCar(car);
@@ -78,7 +76,7 @@ public class CarController {
 
     @DeleteMapping("delete/{plate}")
     public ResponseEntity<?> deleteCar(@PathVariable("plate") String plate) throws ItemNotFoundException {
-        logger.info("********** eliminazione auto di targa: " + plate + " **********");
+        log.info("********** eliminazione auto di targa: " + plate + " **********");
 
         // per messaggi di fine metodo
         HttpHeaders headers = new HttpHeaders();
