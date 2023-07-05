@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.entities.Booking;
+import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +31,11 @@ public class BookingController {
         return new ResponseEntity<Booking>(new HttpHeaders(), HttpStatus.CREATED);
     }
     @PutMapping("edit")
-    public ResponseEntity<Booking> editBooking(@RequestBody Booking booking) {
+    public ResponseEntity<Booking> editBooking(@RequestBody Booking booking) throws ItemNotFoundException {
         log.info("modifica prenotazione");
 
         if (booking.getId() == 0) {
-            log.info("prenotazione non trovata");
-            return new ResponseEntity<Booking>(HttpStatus.NO_CONTENT);
+            throw new ItemNotFoundException("prenotazione non trovata");
         }
 
         bookingService.insBooking(booking);
@@ -43,14 +43,13 @@ public class BookingController {
     }
     @PostMapping("detail/{id}/{status}")
     public ResponseEntity<?> changeStatusBooking(@PathVariable("status") String status,
-                                                 @PathVariable("id") int idBooking) {
+                                                 @PathVariable("id") int idBooking) throws ItemNotFoundException {
         log.info("approvazione o rifiuto della prenotazione");
 
         Booking booking = bookingService.getById(idBooking);
 
         if (booking == null) {
-            log.info(("prenotazione non esistente o id errato"));
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ItemNotFoundException("prenotazione non trovata");
         }
 
         if (status.equals("approve")) {
@@ -66,14 +65,13 @@ public class BookingController {
         return new ResponseEntity<Booking>(booking, HttpStatus.OK);
     }
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteBooking(@PathVariable("id") int id) {
+    public ResponseEntity<?> deleteBooking(@PathVariable("id") int id) throws ItemNotFoundException {
         log.info("eliminazione Booking");
 
         Booking booking = bookingService.getById(id);
 
         if (booking == null) {
-            log.info("prenotazione non esistente");
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ItemNotFoundException("prenotazione non trovata");
         }
 
         bookingService.delBooking(booking);

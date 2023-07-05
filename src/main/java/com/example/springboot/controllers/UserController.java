@@ -2,6 +2,7 @@ package com.example.springboot.controllers;
 
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.User;
+import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,13 @@ public class UserController {
 
     }*/
     @GetMapping("detail/{username}")
-    public ResponseEntity<List<Booking>> getBookingsByUser (@PathVariable("username") String username) {
+    public ResponseEntity<List<Booking>> getBookingsByUser (@PathVariable("username") String username) throws ItemNotFoundException {
         log.info("********** get prenotazioni dell'utente: " + username + " ************");
 
         User user = userService.getByUsername(username);
 
         if (user == null) {
-            log.info("utente non esistente o username errato");
-            return new ResponseEntity<List<Booking>>(HttpStatus.NO_CONTENT);
+            throw new ItemNotFoundException("utente non trovato");
         }
 
         List<Booking> bookings = bookingService.getByUser(user);
@@ -57,7 +57,7 @@ public class UserController {
         log.info("modifica di un utente");
 
         if (userService.getByUsernameAndPassword(user.getUsername(), user.getPassword()) == null) {
-            log.info("effettua il login prima della modifica");
+            log.info("verifica il login prima della modifica");
             return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
         }
 
@@ -65,14 +65,13 @@ public class UserController {
         return new ResponseEntity<User>(new HttpHeaders(), HttpStatus.CREATED);
     }
     @DeleteMapping("delete/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) throws ItemNotFoundException {
         log.info("eliminazione user");
 
         User user = userService.getByUsername(username);
 
         if (user == null) {
-            log.info("utente non esiste");
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ItemNotFoundException("utente non trovato");
         }
 
         userService.delUser(user);
