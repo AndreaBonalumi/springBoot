@@ -15,6 +15,7 @@ public class BookingRequest {
     private Long idBooking;
     private LocalDate start;
     private LocalDate end;
+    private int status = 0;
     private Long userId;
     private Long carId;
 }

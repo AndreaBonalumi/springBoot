@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 public class BookingMapper {
     public Booking newBooking(User user, Car car, BookingRequest reservationRequest) {
         Booking booking = new Booking();
+        booking.setIdBooking(reservationRequest.getIdBooking());
         booking.setDateBookingEnd(reservationRequest.getEnd());
         booking.setDateBookingStart(reservationRequest.getStart());
+        booking.setStatus(booking.getStatus());
         booking.setUser(user);
         booking.setCar(car);
 

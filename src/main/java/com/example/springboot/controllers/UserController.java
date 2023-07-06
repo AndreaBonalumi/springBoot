@@ -42,40 +42,24 @@ public class UserController {
     }
 
     @PostMapping(value = "insertUser")
-    public ResponseEntity<?> insertUser(@RequestBody User user) {
+    public ResponseEntity<?> insertUser(@RequestBody User user) throws ItemNotFoundException {
         log.info("inserimento di un nuovo utente");
 
-        if (userService.getByUsername(user.getUsername()) != null) {
-            log.info("non è possibile effettuare la modifica in questa sezione");
-            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-        }
+        userService.getByUsername(user.getUsername());
 
         userService.insUser(user);
         return new ResponseEntity<User>(new HttpHeaders(), HttpStatus.CREATED);
     }
     @PutMapping("editUser")
-    public ResponseEntity<User> editUser(@RequestBody User user) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void editUser(@RequestBody User user) {
         log.info("modifica di un utente");
 
-        if (userService.getByUsernameAndPassword(user.getUsername(), user.getPassword()) == null) {
-            log.info("verifica il login prima della modifica");
-            return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-        }
-
         userService.insUser(user);
-        return new ResponseEntity<User>(new HttpHeaders(), HttpStatus.CREATED);
     }
-    @DeleteMapping("delete/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) throws ItemNotFoundException {
-        log.info("eliminazione user");
-
-        User user = userService.getByUsername(username);
-
-        if (user == null) {
-            throw new ItemNotFoundException("utente non trovato");
-        }
-
-        userService.delUser(user);
-        return new ResponseEntity<>(new HttpHeaders(), HttpStatus.OK);
+    @DeleteMapping("delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("id") long id) throws ItemNotFoundException {
+        userService.delUser(id);
     }
 }
