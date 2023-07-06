@@ -1,7 +1,7 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.UserDTO;
 import com.example.springboot.entities.Booking;
-import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
@@ -24,31 +24,31 @@ public class UserController {
     public ResponseEntity<User> profileUser() {
 
     }*/
-    @GetMapping("detail/{username}")
+    @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Booking> getBookingsByUser (@PathVariable("username") String username) throws ItemNotFoundException {
-        log.info("********** get prenotazioni dell'utente: " + username + " ************");
+    public List<Booking> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
+        log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
-        User user = userService.getByUsername(username);
+        UserDTO user = userService.getById(id);
 
         return bookingService.getByUser(user);
     }
 
     @PostMapping(value = "insertUser")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody User user) throws ItemNotFoundException {
+    public void insertUser(@RequestBody UserDTO request) throws ItemNotFoundException {
         log.info("inserimento di un nuovo utente");
 
-        userService.getByUsername(user.getUsername());
+        userService.getByUsername(request.getUsername());
 
-        userService.insUser(user);
+        userService.insUser(request);
     }
     @PutMapping("editUser")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editUser(@RequestBody User user) {
+    public void editUser(@RequestBody UserDTO request) {
         log.info("modifica di un utente");
 
-        userService.insUser(user);
+        userService.insUser(request);
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
