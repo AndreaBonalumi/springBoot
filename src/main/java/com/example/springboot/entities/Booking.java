@@ -2,32 +2,30 @@ package com.example.springboot.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Booking implements Serializable {
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Basic(optional = false)
+    private long idBooking;
+    @Column(nullable = false)
     private LocalDate dateBookingStart;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private LocalDate dateBookingEnd;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private int status;
     @ManyToOne
-    @EqualsAndHashCode.Exclude
-    @JoinColumn(name = "user_username", referencedColumnName = "username")
-    @JsonBackReference
+    @JoinColumn(name = "user_id", referencedColumnName = "idUser")
     private User user;
     @ManyToOne
-    @EqualsAndHashCode.Exclude
-    @JoinColumn(name = "car_plate", referencedColumnName = "plate")
-    @JsonBackReference
+    @JoinColumn(name = "car_id", referencedColumnName = "idCar")
     private Car car;
 }
