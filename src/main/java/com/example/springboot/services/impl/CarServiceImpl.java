@@ -17,6 +17,12 @@ public class CarServiceImpl implements CarService {
     CarRepository carRepository;
 
     @Override
+    public Car getById(long id) {
+        return carRepository.findByIdCar(id)
+                .orElseThrow(() -> new RuntimeException("auto non trovata"));
+    }
+
+    @Override
     public List<Car> getAll() {
         return carRepository.findAll();
     }

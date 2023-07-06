@@ -1,5 +1,6 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.UserRequest;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.ItemNotFoundException;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -40,7 +41,7 @@ public class UserController {
         return new ResponseEntity<List<Booking>>(bookings, HttpStatus.OK);
     }
 
-    @PostMapping("insertUser")
+    @PostMapping(value = "insertUser")
     public ResponseEntity<?> insertUser(@RequestBody User user) {
         log.info("inserimento di un nuovo utente");
 

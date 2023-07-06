@@ -14,34 +14,29 @@ import java.util.List;
 
 @Service
 @Transactional
-public class BooingServiceImpl implements BookingService {
+public class BookingServiceImpl implements BookingService {
     @Autowired
     BookingRepository bookingRepository;
     @Override
     public List<Booking> getAll() {
         return bookingRepository.findAll();
     }
-
     @Override
     public Booking getById(int id) {
         return bookingRepository.findById(id);
     }
-
     @Override
     public List<Booking> getByUser(User user) {
         return bookingRepository.findByUser(user);
     }
-
     @Override
     public List<Car> selCarsByDateBooking(LocalDate start, LocalDate end) {
         return bookingRepository.selCarsByDateBooking(start, end);
     }
-
     @Override
     public void insBooking(Booking booking) {
         bookingRepository.saveAndFlush(booking);
     }
-
     @Override
     public void delBooking(Booking booking) {
         bookingRepository.delete(booking);

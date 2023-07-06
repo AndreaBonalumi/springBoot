@@ -15,6 +15,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Override
+    public User getById(long id) {
+
+        return userRepository.findByIdUser(id)
+                .orElseThrow(() -> new RuntimeException("utente non trovato"));
+    }
+
     @Override
     public List<User> getAll() {
         return userRepository.findAll();

@@ -2,36 +2,37 @@ package com.example.springboot.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idUser;
+    @Column(unique = true, nullable = false)
     private String username;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private String firstName;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private String lastName;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private String password;
-    @Basic(optional = false)
     private LocalDate created;
-    @Basic
     private LocalDate bd;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private boolean admin;
-    @Basic(optional = false)
+    @Column(nullable = false)
     private String email;
-    @Basic
     private String nPatente;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private Set<Booking> bookings = new HashSet<>();
 
 }

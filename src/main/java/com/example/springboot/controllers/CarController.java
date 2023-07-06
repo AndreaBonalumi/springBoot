@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/car")
+@RequestMapping("/car")
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
