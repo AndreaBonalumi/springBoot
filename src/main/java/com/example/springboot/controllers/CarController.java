@@ -1,7 +1,6 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.CarDTO;
-import com.example.springboot.entities.Car;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.CarService;
@@ -22,12 +21,7 @@ public class CarController {
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
     public List<CarDTO> allCars() {
-        log.info("***** otteniamo tutto *******");
-
-        List<CarDTO> cars = carService.getAll();
-
-        log.info("numero di auto : " + cars.size());
-        return cars;
+        return carService.getAll();
     }
 
     @GetMapping(value = "id/{plate}", produces = "application/json")
@@ -37,21 +31,18 @@ public class CarController {
     }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertCar(@RequestBody CarDTO car) {
-        carService.insCar(car);
+    public void insertCar(@RequestBody CarDTO car) throws BadRequestException {
+        carService.newCar(car);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editCar(@RequestBody CarDTO car) throws BadRequestException {
+    public void editCar(@RequestBody CarDTO car) throws ItemNotFoundException {
         carService.editCar(car);
     }
 
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCar(@PathVariable("id") String id) throws ItemNotFoundException {
-        log.info("********** eliminazione auto di targa: " + id + " **********");
-        CarDTO car = carService.getByPlate(id);
-
-        carService.delCar(car);
+    public void deleteCar(@PathVariable("id") long id) throws ItemNotFoundException {
+        carService.delCar(id);
     }
 }

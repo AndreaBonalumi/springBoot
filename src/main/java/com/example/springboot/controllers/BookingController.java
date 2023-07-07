@@ -48,7 +48,7 @@ public class BookingController {
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBooking(@PathVariable("id") int id) throws ItemNotFoundException {
+    public void deleteBooking(@PathVariable("id") long id) throws ItemNotFoundException {
         bookingService.delBooking(id);
     }
 }

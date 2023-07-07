@@ -30,6 +30,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDTO> getAll() {
+        log.info("***** otteniamo tutte le auto *******");
+
         return carRepository.findAll()
                 .stream().map(carMapper::newCarDTO)
                 .toList();
@@ -44,22 +46,33 @@ public class CarServiceImpl implements CarService {
     }
     @Override
     public void insCar(CarDTO car) {
-        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
         carRepository.save(carMapper.newCar(car));
     }
 
     @Override
-    public void editCar(CarDTO car) throws BadRequestException {
+    public void editCar(CarDTO car) throws ItemNotFoundException {
         log.info("****** modifica auto: " + car.getPlate() + " *********");
 
         if (car.getIdCar() == null) {
-            throw new BadRequestException("tipo di richiesta non supportata");
+            throw new ItemNotFoundException("auto non trovata");
         }
         insCar(car);
     }
 
     @Override
-    public void delCar(CarDTO car) {
+    public void newCar(CarDTO car) throws BadRequestException {
+        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
+
+        if (car.getIdCar() != null) {
+            throw new BadRequestException("tipo richiesta non supportata");
+        }
+        insCar(car);
+    }
+
+    @Override
+    public void delCar(long id) throws ItemNotFoundException {
+        log.info("********** eliminazione auto : " + id + " **********");
+        CarDTO car = getById(id);
         carRepository.delete(carMapper.newCar(car));
     }
 }

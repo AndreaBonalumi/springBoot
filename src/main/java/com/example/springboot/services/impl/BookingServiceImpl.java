@@ -41,8 +41,8 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
     }
     @Override
-    public BookingDTO getById(int id) throws ItemNotFoundException {
-        Booking booking = bookingRepository.findById(id)
+    public BookingDTO getById(long id) throws ItemNotFoundException {
+        Booking booking = bookingRepository.findByIdBooking(id)
                 .orElseThrow(() -> new ItemNotFoundException("prenotazione non trovata"));
         return bookingMapper.newBookingDTO(booking);
     }
@@ -89,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void delBooking(int id) throws ItemNotFoundException {
+    public void delBooking(long id) throws ItemNotFoundException {
         log.info("eliminazione Booking");
 
         BookingDTO booking = getById(id);
