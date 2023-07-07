@@ -37,22 +37,13 @@ public class CarController {
     }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertCar(@RequestBody CarDTO car) throws ItemNotFoundException, BadRequestException {
-
-        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
-
-        if (carService.getById(car.getIdCar()) != null) {
-            throw new BadRequestException("errore nel tipo di richiesta (POST)");
-        }
-
+    public void insertCar(@RequestBody CarDTO car) {
         carService.insCar(car);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editCar(@RequestBody CarDTO car) throws ItemNotFoundException {
-        log.info("****** modifica auto: " + car.getPlate() + " *********");
-        carService.getById(car.getIdCar());
-        carService.insCar(car);
+    public void editCar(@RequestBody CarDTO car) throws BadRequestException {
+        carService.editCar(car);
     }
 
     @DeleteMapping("delete/{id}")

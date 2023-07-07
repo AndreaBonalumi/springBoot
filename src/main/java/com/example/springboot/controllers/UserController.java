@@ -3,6 +3,7 @@ package com.example.springboot.controllers;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
@@ -21,11 +22,6 @@ public class UserController {
     private final UserService userService;
     private final BookingService bookingService;
     private final UserMapper userMapper;
-
-    /*@GetMapping("profile")
-    public ResponseEntity<User> profileUser() {
-
-    }*/
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
@@ -39,18 +35,12 @@ public class UserController {
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserDTO request) throws ItemNotFoundException {
-        log.info("inserimento di un nuovo utente");
-
-        userService.getByUsername(request.getUsername());
-
         userService.insUser(request);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editUser(@RequestBody UserDTO request) {
-        log.info("modifica di un utente");
-
-        userService.insUser(request);
+    public void editUser(@RequestBody UserDTO request) throws BadRequestException {
+        userService.editUser(request);
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)

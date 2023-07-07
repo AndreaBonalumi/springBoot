@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.BookingDTO;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ public class BookingController {
     private final BookingService bookingService;
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
-        bookingService.insBooking(request);
+    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException, BadRequestException {
+        bookingService.newBooking(request);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)

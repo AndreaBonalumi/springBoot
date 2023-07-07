@@ -1,17 +1,17 @@
 package com.example.springboot.services;
 
 import com.example.springboot.dto.UserDTO;
-import com.example.springboot.entities.User;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 
 import java.util.List;
 
 public interface UserService {
-    UserDTO getById(long id);
+    UserDTO getById(long id) throws ItemNotFoundException;
     List<UserDTO> getAll();
-    UserDTO getByUsername(String username) throws ItemNotFoundException;
     UserDTO getByUsernameAndPassword(String username, String password) throws ItemNotFoundException;
-    void insUser(UserDTO user);
+    void insUser(UserDTO user) throws ItemNotFoundException;
+    void editUser(UserDTO user) throws BadRequestException;
     void delUser(long id) throws ItemNotFoundException;
     boolean thereIsAdmin();
     void saveNewAdmin();

@@ -3,6 +3,7 @@ package com.example.springboot.services.impl;
 import com.example.springboot.dto.CarDTO;
 import com.example.springboot.dto.mapper.CarMapper;
 import com.example.springboot.entities.Car;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.CarRepository;
 import com.example.springboot.services.CarService;
@@ -43,8 +44,20 @@ public class CarServiceImpl implements CarService {
     }
     @Override
     public void insCar(CarDTO car) {
+        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
         carRepository.save(carMapper.newCar(car));
     }
+
+    @Override
+    public void editCar(CarDTO car) throws BadRequestException {
+        log.info("****** modifica auto: " + car.getPlate() + " *********");
+
+        if (car.getIdCar() == null) {
+            throw new BadRequestException("tipo di richiesta non supportata");
+        }
+        insCar(car);
+    }
+
     @Override
     public void delCar(CarDTO car) {
         carRepository.delete(carMapper.newCar(car));

@@ -9,6 +9,7 @@ import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.Car;
 import com.example.springboot.entities.User;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.BookingRepository;
 import com.example.springboot.services.BookingService;
@@ -75,6 +76,16 @@ public class BookingServiceImpl implements BookingService {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
         insBooking(request);
+    }
+
+    @Override
+    public void newBooking(BookingDTO booking) throws BadRequestException, ItemNotFoundException {
+        log.info("inserimento prenotazione");
+
+        if (booking.getUserId() != null) {
+            throw new BadRequestException("tipo di richiesta non suportata");
+        }
+        insBooking(booking);
     }
 
     @Override

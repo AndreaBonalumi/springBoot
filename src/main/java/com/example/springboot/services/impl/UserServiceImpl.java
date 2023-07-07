@@ -3,6 +3,7 @@ package com.example.springboot.services.impl;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.User;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.UserRepository;
 import com.example.springboot.services.UserService;
@@ -24,10 +25,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDTO getById(long id) {
+    public UserDTO getById(long id) throws ItemNotFoundException {
 
         User user = userRepository.findByIdUser(id)
-                .orElseThrow(() -> new RuntimeException("utente non trovato"));
+                .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
         return userMapper.newUserDto(user);
     }
 
@@ -42,13 +43,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getByUsername(String username) throws ItemNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.newUserDto(user);
-    }
-
-    @Override
     public UserDTO getByUsernameAndPassword(String username, String password) throws ItemNotFoundException {
         User user = userRepository.findByUsernameAndPassword(username, password)
                 .orElseThrow(() -> new ItemNotFoundException("username o password errati"));
@@ -57,7 +51,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void insUser(UserDTO user) {
+        log.info("inserimento di un nuovo utente");
+
         userRepository.save(userMapper.newUser(user));
+    }
+
+    @Override
+    public void editUser(UserDTO user) throws BadRequestException {
+        log.info("modifica di un utente");
+
+        if (user.getIdUser() == null) {
+            throw new BadRequestException("Richiesta non supportata per questa operazione");
+        }
+
+        insUser(user);
     }
 
     @Override
