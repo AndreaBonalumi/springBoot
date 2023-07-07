@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.UserDTO;
+import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final BookingService bookingService;
+    private final UserMapper userMapper;
 
     /*@GetMapping("profile")
     public ResponseEntity<User> profileUser() {
@@ -31,7 +33,7 @@ public class UserController {
 
         UserDTO user = userService.getById(id);
 
-        return bookingService.getByUser(user);
+        return bookingService.getByUser(userMapper.newUser(user));
     }
 
     @PostMapping(value = "insertUser")

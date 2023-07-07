@@ -1,7 +1,6 @@
 package com.example.springboot.controllers;
 
-import com.example.springboot.dto.BookingRequest;
-import com.example.springboot.entities.Booking;
+import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -17,30 +16,18 @@ public class BookingController {
     private final BookingService bookingService;
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertBooking(@RequestBody BookingRequest request) throws ItemNotFoundException {
-        log.info("inserimento/modifica prenotazione");
-
-        if(request.getIdBooking() != null) {
-            log.info("non è possibile effettuare la modifica in questa sezione");
-            throw new ItemNotFoundException("non è possibile effettuare la modifica in questa sezione");
-        }
+    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
         bookingService.insBooking(request);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editBooking(@RequestBody BookingRequest request) throws ItemNotFoundException {
-        log.info("modifica prenotazione");
-
-        if (request.getIdBooking() == null) {
-            throw new ItemNotFoundException("prenotazione non trovata");
-        }
-
-        bookingService.insBooking(request);
+    public void editBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
+        bookingService.editBooking(request);
     }
     @PostMapping("detail/{status}")
     @ResponseStatus(HttpStatus.OK)
     public void changeStatusBooking(@PathVariable("status") String status,
-                                    @RequestBody BookingRequest request) throws ItemNotFoundException {
+                                    @RequestBody BookingDTO request) throws ItemNotFoundException {
         log.info("approvazione o rifiuto della prenotazione");
 
         if (request == null) {

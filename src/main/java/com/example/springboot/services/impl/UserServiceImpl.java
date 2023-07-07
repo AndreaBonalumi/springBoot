@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void insUser(UserDTO user) {
-        userRepository.saveAndFlush(userMapper.newUser(user));
+        userRepository.save(userMapper.newUser(user));
     }
 
     @Override

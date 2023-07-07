@@ -1,14 +1,13 @@
 package com.example.springboot.services.impl;
 
-import com.example.springboot.entities.Booking;
+import com.example.springboot.dto.CarDTO;
+import com.example.springboot.dto.mapper.CarMapper;
 import com.example.springboot.entities.Car;
-import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.CarRepository;
 import com.example.springboot.services.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +19,12 @@ import java.util.List;
 @Transactional
 public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
+    private final CarMapper carMapper;
     @Override
-    public Car getById(long id) throws ItemNotFoundException {
-        return carRepository.findByIdCar(id)
+    public CarDTO getById(long id) throws ItemNotFoundException {
+        Car car = carRepository.findByIdCar(id)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
+        return carMapper
     }
 
     @Override
@@ -31,18 +32,19 @@ public class CarServiceImpl implements CarService {
         return carRepository.findAll();
     }
     @Override
-    public Car getByPlate(String plate) throws ItemNotFoundException {
+    public CarDTO getByPlate(String plate) throws ItemNotFoundException {
         log.info("********* otteniamo solo una auto con targa: " + plate + " ***********");
 
-        return carRepository.getByPlate(plate)
+        Car car = carRepository.getByPlate(plate)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
+        return carMapper
     }
     @Override
-    public void insCar(Car car) {
-        carRepository.saveAndFlush(car);
+    public void insCar(CarDTO car) {
+        carRepository.save(carMapper.newCar(car));
     }
     @Override
-    public void delCar(Car car) {
-        carRepository.delete(car);
+    public void delCar(CarDTO car) {
+        carRepository.delete(carMapper.newCar(car));
     }
 }

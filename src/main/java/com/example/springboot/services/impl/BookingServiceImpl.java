@@ -1,7 +1,11 @@
 package com.example.springboot.services.impl;
 
-import com.example.springboot.dto.BookingRequest;
+import com.example.springboot.dto.BookingDTO;
+import com.example.springboot.dto.CarDTO;
+import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.BookingMapper;
+import com.example.springboot.dto.mapper.CarMapper;
+import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.Car;
 import com.example.springboot.entities.User;
@@ -27,39 +31,64 @@ public class BookingServiceImpl implements BookingService {
     private final UserService userService;
     private final CarService carService;
     private final BookingMapper bookingMapper;
+    private final CarMapper carMapper;
+    private final UserMapper userMapper;
     @Override
-    public List<Booking> getAll() {
-        return bookingRepository.findAll();
+    public List<BookingDTO> getAll() {
+        return bookingRepository.findAll()
+                .stream().map(bookingMapper::newBookingDTO)
+                .toList();
     }
     @Override
-    public Booking getById(int id) throws ItemNotFoundException {
-        return bookingRepository.findById(id)
+    public BookingDTO getById(int id) throws ItemNotFoundException {
+        Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("prenotazione non trovata"));
+        return bookingMapper.newBookingDTO(booking);
     }
     @Override
-    public List<Booking> getByUser(User user) {
-        return bookingRepository.findByUser(user);
+    public List<BookingDTO> getByUser(User user) {
+        return bookingRepository.findByUser(user)
+                .stream().map(bookingMapper::newBookingDTO
+                )
+                .toList();
     }
     @Override
     public List<Car> selCarsByDateBooking(LocalDate start, LocalDate end) {
         return bookingRepository.selCarsByDateBooking(start, end);
     }
     @Override
-    public void insBooking(BookingRequest request) throws ItemNotFoundException {
-        User user = userService.getById(request.getUserId());
-        Car car = carService.getById(request.getCarId());
+    public void insBooking(BookingDTO request) throws ItemNotFoundException {
+        log.info("inserimento/modifica prenotazione");
 
-        Booking booking = bookingMapper.newBooking(user, car, request);
-        bookingRepository.saveAndFlush(booking);
+        UserDTO user = userService.getById(request.getUserId());
+        CarDTO car = carService.getById(request.getCarId());
+
+        Booking booking = bookingMapper.newBooking(userMapper.newUser(user), carMapper.newCar(car), request);
+        bookingRepository.save(booking);
     }
+
+    @Override
+    public void editBooking(BookingDTO request) throws ItemNotFoundException {
+        log.info("modifica prenotazione");
+
+        if (request.getIdBooking() == null) {
+            throw new ItemNotFoundException("prenotazione non trovata");
+        }
+        insBooking(request);
+    }
+
     @Override
     public void delBooking(int id) throws ItemNotFoundException {
         log.info("eliminazione Booking");
 
-        Booking booking = getById(id);
+        BookingDTO booking = getById(id);
         if (booking == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
-        bookingRepository.delete(booking);
+        bookingRepository.delete(
+                bookingMapper.newBooking(
+                    userMapper.newUser(userService.getById(booking.getUserId())),
+                    carMapper.newCar(carService.getById(booking.getCarId())),
+                    booking));
     }
 }

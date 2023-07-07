@@ -1,5 +1,6 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.CarDTO;
 import com.example.springboot.entities.Car;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
@@ -31,12 +32,12 @@ public class CarController {
 
     @GetMapping(value = "id/{plate}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public Car carByPlate(@PathVariable("plate") String plate) throws ItemNotFoundException {
+    public CarDTO carByPlate(@PathVariable("plate") String plate) throws ItemNotFoundException {
         return carService.getByPlate(plate);
     }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertCar(@RequestBody Car car) throws ItemNotFoundException, BadRequestException {
+    public void insertCar(@RequestBody CarDTO car) throws ItemNotFoundException, BadRequestException {
 
         log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
 
@@ -48,7 +49,7 @@ public class CarController {
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editCar(@RequestBody Car car) throws ItemNotFoundException {
+    public void editCar(@RequestBody CarDTO car) throws ItemNotFoundException {
         log.info("****** modifica auto: " + car.getPlate() + " *********");
         carService.getById(car.getIdCar());
         carService.insCar(car);
@@ -58,7 +59,7 @@ public class CarController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteCar(@PathVariable("plate") String plate) throws ItemNotFoundException {
         log.info("********** eliminazione auto di targa: " + plate + " **********");
-        Car car = carService.getByPlate(plate);
+        CarDTO car = carService.getByPlate(plate);
 
         carService.delCar(car);
     }

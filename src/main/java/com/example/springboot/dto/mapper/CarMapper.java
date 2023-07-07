@@ -1,15 +1,14 @@
 package com.example.springboot.dto.mapper;
 
-import com.example.springboot.dto.CarRequest;
+import com.example.springboot.dto.CarDTO;
 import com.example.springboot.entities.Car;
 import org.springframework.stereotype.Component;
 
-import java.net.CacheRequest;
 import java.time.LocalDate;
 
 @Component
 public class CarMapper {
-    public Car newCar(CarRequest carRequest) {
+    public Car newCar(CarDTO carRequest) {
         Car car = new Car();
         car.setPlate(carRequest.getPlate());
         car.setBrand(carRequest.getBrand());
