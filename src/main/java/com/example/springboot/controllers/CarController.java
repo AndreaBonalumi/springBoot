@@ -19,12 +19,12 @@ import java.util.List;
 public class CarController {
     private final CarService carService;
 
-    @GetMapping(value = "all", produces = "application/json")
+    @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Car> allCars() {
+    public List<CarDTO> allCars() {
         log.info("***** otteniamo tutto *******");
 
-        List<Car> cars = carService.getAll();
+        List<CarDTO> cars = carService.getAll();
 
         log.info("numero di auto : " + cars.size());
         return cars;
@@ -55,11 +55,11 @@ public class CarController {
         carService.insCar(car);
     }
 
-    @DeleteMapping("delete/{plate}")
+    @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCar(@PathVariable("plate") String plate) throws ItemNotFoundException {
-        log.info("********** eliminazione auto di targa: " + plate + " **********");
-        CarDTO car = carService.getByPlate(plate);
+    public void deleteCar(@PathVariable("id") String id) throws ItemNotFoundException {
+        log.info("********** eliminazione auto di targa: " + id + " **********");
+        CarDTO car = carService.getByPlate(id);
 
         carService.delCar(car);
     }

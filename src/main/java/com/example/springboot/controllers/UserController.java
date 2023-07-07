@@ -3,7 +3,6 @@ package com.example.springboot.controllers;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
-import com.example.springboot.entities.Booking;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
@@ -37,7 +36,7 @@ public class UserController {
         return bookingService.getByUser(userMapper.newUser(user));
     }
 
-    @PostMapping(value = "insertUser")
+    @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserDTO request) throws ItemNotFoundException {
         log.info("inserimento di un nuovo utente");
@@ -46,7 +45,7 @@ public class UserController {
 
         userService.insUser(request);
     }
-    @PutMapping("editUser")
+    @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
     public void editUser(@RequestBody UserDTO request) {
         log.info("modifica di un utente");
