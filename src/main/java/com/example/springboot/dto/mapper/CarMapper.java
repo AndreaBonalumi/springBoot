@@ -21,4 +21,17 @@ public class CarMapper {
 
         return car;
     }
+    public CarDTO newCarDTO(Car car) {
+        CarDTO carDTO = new CarDTO();
+        carDTO.setIdCar(car.getIdCar());
+        carDTO.setBrand(car.getBrand());
+        carDTO.setModel(car.getModel());
+        carDTO.setColor(car.getColor());
+        carDTO.setDescription(car.getDescription());
+        carDTO.setPlate(car.getPlate());
+        carDTO.setLink(car.getLink());
+        carDTO.setYear(car.getYear());
+
+        return carDTO;
+    }
 }

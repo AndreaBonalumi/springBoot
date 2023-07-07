@@ -1,5 +1,6 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.Booking;
@@ -28,7 +29,7 @@ public class UserController {
     }*/
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Booking> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
+    public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
         UserDTO user = userService.getById(id);

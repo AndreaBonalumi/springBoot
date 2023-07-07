@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CarService {
     CarDTO getById(long id) throws ItemNotFoundException;
-    List<Car> getAll();
+    List<CarDTO> getAll();
     CarDTO getByPlate(String plate) throws ItemNotFoundException;
     void insCar(CarDTO car);
     void delCar (CarDTO car);

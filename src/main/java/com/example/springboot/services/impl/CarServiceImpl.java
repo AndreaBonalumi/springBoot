@@ -24,12 +24,14 @@ public class CarServiceImpl implements CarService {
     public CarDTO getById(long id) throws ItemNotFoundException {
         Car car = carRepository.findByIdCar(id)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
-        return carMapper
+        return carMapper.newCarDTO(car);
     }
 
     @Override
-    public List<Car> getAll() {
-        return carRepository.findAll();
+    public List<CarDTO> getAll() {
+        return carRepository.findAll()
+                .stream().map(carMapper::newCarDTO)
+                .toList();
     }
     @Override
     public CarDTO getByPlate(String plate) throws ItemNotFoundException {
@@ -37,7 +39,7 @@ public class CarServiceImpl implements CarService {
 
         Car car = carRepository.getByPlate(plate)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
-        return carMapper
+        return carMapper.newCarDTO(car);
     }
     @Override
     public void insCar(CarDTO car) {
