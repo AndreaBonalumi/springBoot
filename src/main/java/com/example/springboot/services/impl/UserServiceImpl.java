@@ -51,19 +51,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void insUser(UserDTO user) {
-        log.info("inserimento di un nuovo utente");
-
         userRepository.save(userMapper.newUser(user));
     }
 
     @Override
-    public void editUser(UserDTO user) throws BadRequestException {
+    public void editUser(UserDTO user) throws ItemNotFoundException {
         log.info("modifica di un utente");
 
         if (user.getIdUser() == null) {
-            throw new BadRequestException("Richiesta non supportata per questa operazione");
+            throw new ItemNotFoundException("user non trovato");
         }
 
+        insUser(user);
+    }
+
+    @Override
+    public void newUser(UserDTO user) throws BadRequestException {
+        log.info("inserimento di un nuovo utente");
+
+        if (user.getIdUser() != null) {
+            throw new BadRequestException("richiesta non supportata");
+        }
         insUser(user);
     }
 

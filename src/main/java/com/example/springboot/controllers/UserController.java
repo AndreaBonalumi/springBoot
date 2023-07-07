@@ -34,12 +34,12 @@ public class UserController {
 
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody UserDTO request) throws ItemNotFoundException {
-        userService.insUser(request);
+    public void insertUser(@RequestBody UserDTO request) throws BadRequestException {
+        userService.newUser(request);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editUser(@RequestBody UserDTO request) throws BadRequestException {
+    public void editUser(@RequestBody UserDTO request) throws ItemNotFoundException {
         userService.editUser(request);
     }
     @DeleteMapping("delete/{id}")
