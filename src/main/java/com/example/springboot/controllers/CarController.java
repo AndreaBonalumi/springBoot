@@ -24,7 +24,7 @@ public class CarController {
         return carService.getAll();
     }
 
-    @GetMapping(value = "id/{plate}", produces = "application/json")
+    @GetMapping(value = "id/{plate}")
     @ResponseStatus(HttpStatus.OK)
     public CarDTO carByPlate(@PathVariable("plate") String plate) throws ItemNotFoundException {
         return carService.getByPlate(plate);

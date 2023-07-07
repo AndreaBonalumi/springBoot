@@ -10,6 +10,11 @@ import java.time.LocalDate;
 public class CarMapper {
     public Car newCar(CarDTO carRequest) {
         Car car = new Car();
+
+        if (carRequest.getIdCar() != null) {
+            car.setIdCar(carRequest.getIdCar());
+        }
+
         car.setPlate(carRequest.getPlate());
         car.setBrand(carRequest.getBrand());
         car.setModel(carRequest.getModel());

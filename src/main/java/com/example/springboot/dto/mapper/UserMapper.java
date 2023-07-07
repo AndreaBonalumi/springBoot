@@ -10,6 +10,11 @@ import java.time.LocalDate;
 public class UserMapper {
     public User newUser(UserDTO userRequest) {
         User user = new User();
+
+        if (userRequest.getIdUser() != null) {
+            user.setIdUser(userRequest.getIdUser());
+        }
+
         user.setUsername(userRequest.getUsername());
         user.setPassword(userRequest.getPassword());
         user.setFirstName(userRequest.getFirstName());
@@ -29,9 +34,10 @@ public class UserMapper {
         userDTO.setUsername(user.getUsername());
         userDTO.setAdmin(user.isAdmin());
         userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(userDTO.getLastName());
-        userDTO.setPassword(userDTO.getPassword());
-        user.setEmail(user.getEmail());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setEmail(user.getFirstName() + "."
+        + user.getLastName() + "@si2001.it");
         userDTO.setBirthday(user.getBd());
         userDTO.setNPatente(user.getNPatente());
 

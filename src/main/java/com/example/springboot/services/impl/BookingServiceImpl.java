@@ -82,7 +82,7 @@ public class BookingServiceImpl implements BookingService {
     public void newBooking(BookingDTO booking) throws BadRequestException, ItemNotFoundException {
         log.info("inserimento prenotazione");
 
-        if (booking.getUserId() != null) {
+        if (booking.getIdBooking() != null) {
             throw new BadRequestException("tipo di richiesta non suportata");
         }
         insBooking(booking);
