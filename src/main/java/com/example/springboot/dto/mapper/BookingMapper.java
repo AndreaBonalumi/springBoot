@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookingMapper {
-    public Booking newBooking(User user, Car car, BookingDTO reservationRequest) {
+    public Booking newBooking(User user, Car car, BookingDTO bookingDTO) {
         Booking booking = new Booking();
 
-        if (reservationRequest.getIdBooking() != null) {
-            booking.setIdBooking(reservationRequest.getIdBooking());
+        if (bookingDTO.getIdBooking() != null) {
+            booking.setIdBooking(bookingDTO.getIdBooking());
         }
 
-        booking.setDateBookingEnd(reservationRequest.getEnd());
-        booking.setDateBookingStart(reservationRequest.getStart());
+        booking.setDateBookingEnd(bookingDTO.getEnd());
+        booking.setDateBookingStart(bookingDTO.getStart());
 
-        if (reservationRequest.getStatus() == null) {
+        if (bookingDTO.getStatus() == null) {
             booking.setStatus(0);
         } else {
-            booking.setStatus(reservationRequest.getStatus());
+            booking.setStatus(bookingDTO.getStatus());
         }
 
         booking.setUser(user);

@@ -37,36 +37,28 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
     @Override
-    public CarDTO getByPlate(String plate) throws ItemNotFoundException {
-        log.info("********* otteniamo solo una auto con targa: " + plate + " ***********");
-
-        Car car = carRepository.getByPlate(plate)
-                .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
-        return carMapper.newCarDTO(car);
-    }
-    @Override
-    public void insCar(CarDTO car) {
-        carRepository.save(carMapper.newCar(car));
+    public void insCar(CarDTO carDTO) {
+        carRepository.save(carMapper.newCar(carDTO));
     }
 
     @Override
-    public void editCar(CarDTO car) throws ItemNotFoundException {
-        log.info("****** modifica auto: " + car.getPlate() + " *********");
+    public void editCar(CarDTO carDTO) throws ItemNotFoundException {
+        log.info("****** modifica auto: " + carDTO.getPlate() + " *********");
 
-        if (car.getIdCar() == null) {
+        if (carDTO.getIdCar() == null) {
             throw new ItemNotFoundException("auto non trovata");
         }
-        insCar(car);
+        insCar(carDTO);
     }
 
     @Override
-    public void newCar(CarDTO car) throws BadRequestException {
-        log.info("****** creazione auto con targa: " + car.getPlate() + " ************");
+    public void newCar(CarDTO carDTO) throws BadRequestException {
+        log.info("****** creazione auto con targa: " + carDTO.getPlate() + " ************");
 
-        if (car.getIdCar() != null) {
+        if (carDTO.getIdCar() != null) {
             throw new BadRequestException("tipo richiesta non supportata");
         }
-        insCar(car);
+        insCar(carDTO);
     }
 
     @Override

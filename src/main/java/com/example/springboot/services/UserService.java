@@ -10,9 +10,9 @@ public interface UserService {
     UserDTO getById(long id) throws ItemNotFoundException;
     List<UserDTO> getAll();
     UserDTO getByUsernameAndPassword(String username, String password) throws ItemNotFoundException;
-    void insUser(UserDTO user);
-    void editUser(UserDTO user) throws ItemNotFoundException;
-    void newUser(UserDTO user) throws BadRequestException;
+    void insUser(UserDTO userDTO);
+    void editUser(UserDTO userDTO) throws ItemNotFoundException;
+    void newUser(UserDTO userDTO) throws BadRequestException;
     void delUser(long id) throws ItemNotFoundException;
     boolean thereIsAdmin();
     void saveNewAdmin();

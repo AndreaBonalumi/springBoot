@@ -58,35 +58,36 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.selCarsByDateBooking(start, end);
     }
     @Override
-    public void insBooking(BookingDTO request) throws ItemNotFoundException {
+    public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
         log.info("inserimento/modifica prenotazione");
 
-        UserDTO user = userService.getById(request.getUserId());
-        CarDTO car = carService.getById(request.getCarId());
+        UserDTO user = userService.getById(bookingDTO.getUserId());
+        CarDTO car = carService.getById(bookingDTO.getCarId());
 
-        Booking booking = bookingMapper.newBooking(userMapper.newUser(user), carMapper.newCar(car), request);
+        Booking booking = bookingMapper.newBooking(userMapper.newUser(user), carMapper.newCar(car), bookingDTO);
+
         bookingRepository.save(booking);
     }
 
     @Override
-    public void editBooking(BookingDTO request) throws ItemNotFoundException {
+    public void editBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
         log.info("modifica prenotazione");
-        request.setStatus(0);
+        bookingDTO.setStatus(0);
 
-        if (request.getIdBooking() == null) {
+        if (bookingDTO.getIdBooking() == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
-        insBooking(request);
+        insBooking(bookingDTO);
     }
 
     @Override
-    public void newBooking(BookingDTO booking) throws BadRequestException, ItemNotFoundException {
+    public void newBooking(BookingDTO bookingDTO) throws BadRequestException, ItemNotFoundException {
         log.info("inserimento prenotazione");
 
-        if (booking.getIdBooking() != null) {
+        if (bookingDTO.getIdBooking() != null) {
             throw new BadRequestException("tipo di richiesta non suportata");
         }
-        insBooking(booking);
+        insBooking(bookingDTO);
     }
 
     @Override
