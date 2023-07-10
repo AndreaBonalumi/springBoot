@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Component
 public class CarMapper {
-    public Car newCar(CarDTO carRequest) {
+    public Car dtoToEntity(CarDTO carRequest) {
         Car car = new Car();
 
         if (carRequest.getIdCar() != null) {
@@ -26,7 +26,7 @@ public class CarMapper {
 
         return car;
     }
-    public CarDTO newCarDTO(Car car) {
+    public CarDTO entityToDto(Car car) {
         CarDTO carDTO = new CarDTO();
         carDTO.setIdCar(car.getIdCar());
         carDTO.setBrand(car.getBrand());

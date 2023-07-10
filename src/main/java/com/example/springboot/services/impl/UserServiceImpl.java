@@ -28,25 +28,25 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.newUserDto(user);
+        return userMapper.entityToDto(user);
     }
 
     @Override
     public List<UserDTO> getAll() {
         return userRepository.findAll()
-                .stream().map(userMapper::newUserDto).toList();
+                .stream().map(userMapper::entityToDto).toList();
     }
 
     @Override
     public UserDTO getByUsernameAndPassword(String username, String password) throws ItemNotFoundException {
         User user = userRepository.findByUsernameAndPassword(username, password)
                 .orElseThrow(() -> new ItemNotFoundException("username o password errati"));
-        return userMapper.newUserDto(user);
+        return userMapper.entityToDto(user);
     }
 
     @Override
     public void insUser(UserDTO userDTO) {
-        userRepository.save(userMapper.newUser(userDTO));
+        userRepository.save(userMapper.dtoToEntity(userDTO));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         UserDTO user = getById(id);
 
-        userRepository.delete(userMapper.newUser(user));
+        userRepository.delete(userMapper.dtoToEntity(user));
     }
 
     @Override

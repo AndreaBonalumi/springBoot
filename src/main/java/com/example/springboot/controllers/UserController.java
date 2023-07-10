@@ -34,7 +34,7 @@ public class UserController {
 
         UserDTO user = userService.getById(id);
 
-        return bookingService.getByUser(userMapper.newUser(user));
+        return bookingService.getByUser(userMapper.dtoToEntity(user));
     }
 
     @PostMapping(value = "insert")

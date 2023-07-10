@@ -1,6 +1,7 @@
 package com.example.springboot.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Car implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCar;
     @Column(nullable = false, unique = true)
+    @Pattern(regexp = "[A-Z]{2}\\d{3}[A-Z]{2}", message = "targa errata")
     private String plate;
     @Column(nullable = false)
     private String brand;
@@ -30,6 +32,6 @@ public class Car implements Serializable {
     @Column(nullable = false)
     private String description;
     private String link;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "car", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "car", orphanRemoval = true)
     private Set<Booking> bookings = new HashSet<>();
 }

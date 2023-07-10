@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CarRepository extends JpaRepository<Car, String> {
+public interface CarRepository extends JpaRepository<Car, Long> {
     Optional<Car> findByIdCar(long id);
     Optional<Car> getByPlate(String plate);
 }

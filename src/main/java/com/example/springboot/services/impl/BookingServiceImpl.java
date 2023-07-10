@@ -1,11 +1,7 @@
 package com.example.springboot.services.impl;
 
 import com.example.springboot.dto.BookingDTO;
-import com.example.springboot.dto.CarDTO;
-import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.BookingMapper;
-import com.example.springboot.dto.mapper.CarMapper;
-import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.Car;
 import com.example.springboot.entities.User;
@@ -13,8 +9,6 @@ import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.BookingRepository;
 import com.example.springboot.services.BookingService;
-import com.example.springboot.services.CarService;
-import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,27 +23,23 @@ import java.util.List;
 @Transactional
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
-    private final UserService userService;
-    private final CarService carService;
     private final BookingMapper bookingMapper;
-    private final CarMapper carMapper;
-    private final UserMapper userMapper;
     @Override
     public List<BookingDTO> getAll() {
         return bookingRepository.findAll()
-                .stream().map(bookingMapper::newBookingDTO)
+                .stream().map(bookingMapper::entityToDto)
                 .toList();
     }
     @Override
     public BookingDTO getById(long id) throws ItemNotFoundException {
         Booking booking = bookingRepository.findByIdBooking(id)
                 .orElseThrow(() -> new ItemNotFoundException("prenotazione non trovata"));
-        return bookingMapper.newBookingDTO(booking);
+        return bookingMapper.entityToDto(booking);
     }
     @Override
     public List<BookingDTO> getByUser(User user) {
         return bookingRepository.findByUser(user)
-                .stream().map(bookingMapper::newBookingDTO
+                .stream().map(bookingMapper::entityToDto
                 )
                 .toList();
     }
@@ -61,10 +51,7 @@ public class BookingServiceImpl implements BookingService {
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
         log.info("inserimento/modifica prenotazione");
 
-        UserDTO user = userService.getById(bookingDTO.getUserId());
-        CarDTO car = carService.getById(bookingDTO.getCarId());
-
-        Booking booking = bookingMapper.newBooking(userMapper.newUser(user), carMapper.newCar(car), bookingDTO);
+        Booking booking = bookingMapper.dtoToEntity(bookingDTO);
 
         bookingRepository.save(booking);
     }
@@ -94,12 +81,8 @@ public class BookingServiceImpl implements BookingService {
     public void delBooking(long id) throws ItemNotFoundException {
         log.info("eliminazione Booking");
 
-        BookingDTO booking = getById(id);
+        getById(id);
 
-        bookingRepository.delete(
-                bookingMapper.newBooking(
-                    userMapper.newUser(userService.getById(booking.getUserId())),
-                    carMapper.newCar(carService.getById(booking.getCarId())),
-                    booking));
+        bookingRepository.deleteById(id);
     }
 }

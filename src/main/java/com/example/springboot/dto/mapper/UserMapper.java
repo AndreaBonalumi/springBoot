@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Component
 public class UserMapper {
-    public User newUser(UserDTO userDTO) {
+    public User dtoToEntity(UserDTO userDTO) {
         User user = new User();
 
         if (userDTO.getIdUser() != null) {
@@ -31,7 +31,7 @@ public class UserMapper {
 
         return user;
     }
-    public UserDTO newUserDto(User user) {
+    public UserDTO entityToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setIdUser(user.getIdUser());
         userDTO.setUsername(user.getUsername());

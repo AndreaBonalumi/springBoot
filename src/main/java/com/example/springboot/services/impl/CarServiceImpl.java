@@ -25,7 +25,7 @@ public class CarServiceImpl implements CarService {
     public CarDTO getById(long id) throws ItemNotFoundException {
         Car car = carRepository.findByIdCar(id)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
-        return carMapper.newCarDTO(car);
+        return carMapper.entityToDto(car);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class CarServiceImpl implements CarService {
         log.info("***** otteniamo tutte le auto *******");
 
         return carRepository.findAll()
-                .stream().map(carMapper::newCarDTO)
+                .stream().map(carMapper::entityToDto)
                 .toList();
     }
     @Override
     public void insCar(CarDTO carDTO) {
-        carRepository.save(carMapper.newCar(carDTO));
+        carRepository.save(carMapper.dtoToEntity(carDTO));
     }
 
     @Override
@@ -67,6 +67,6 @@ public class CarServiceImpl implements CarService {
 
         CarDTO car = getById(id);
 
-        carRepository.delete(carMapper.newCar(car));
+        carRepository.delete(carMapper.dtoToEntity(car));
     }
 }
