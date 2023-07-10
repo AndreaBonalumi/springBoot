@@ -21,7 +21,7 @@ public class BookingMapper {
         if (reservationRequest.getStatus() == null) {
             booking.setStatus(0);
         } else {
-            booking.setStatus(booking.getStatus());
+            booking.setStatus(reservationRequest.getStatus());
         }
 
         booking.setUser(user);

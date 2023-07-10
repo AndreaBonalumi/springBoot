@@ -22,6 +22,11 @@ public class UserController {
     private final UserService userService;
     private final BookingService bookingService;
     private final UserMapper userMapper;
+    @GetMapping(value = "all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDTO> allCars() {
+        return userService.getAll();
+    }
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {

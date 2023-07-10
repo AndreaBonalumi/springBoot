@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
         UserDTO user = getById(id);
 
-        if (user == null) {
+        if (user.getIdUser() == null) {
             throw new ItemNotFoundException("utente non trovato");
         }
 

@@ -23,12 +23,6 @@ public class CarController {
     public List<CarDTO> allCars() {
         return carService.getAll();
     }
-
-    @GetMapping(value = "id/{plate}")
-    @ResponseStatus(HttpStatus.OK)
-    public CarDTO carByPlate(@PathVariable("plate") String plate) throws ItemNotFoundException {
-        return carService.getByPlate(plate);
-    }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertCar(@RequestBody CarDTO car) throws BadRequestException {

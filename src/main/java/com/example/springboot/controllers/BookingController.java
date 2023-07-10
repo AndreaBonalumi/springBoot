@@ -31,7 +31,7 @@ public class BookingController {
                                     @RequestBody BookingDTO request) throws ItemNotFoundException {
         log.info("approvazione o rifiuto della prenotazione");
 
-        if (request == null) {
+        if (request.getIdBooking() == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
 

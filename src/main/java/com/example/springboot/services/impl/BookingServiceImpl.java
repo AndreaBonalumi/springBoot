@@ -71,6 +71,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void editBooking(BookingDTO request) throws ItemNotFoundException {
         log.info("modifica prenotazione");
+        request.setStatus(0);
 
         if (request.getIdBooking() == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
@@ -93,7 +94,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("eliminazione Booking");
 
         BookingDTO booking = getById(id);
-        if (booking == null) {
+        if (booking.getIdBooking() == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
         bookingRepository.delete(
