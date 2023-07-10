@@ -1,5 +1,6 @@
 package com.example.springboot.dto;
 
+import com.example.springboot.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class BookingDTO {
     private Long idBooking;
     private LocalDate start;
     private LocalDate end;
-    private Integer status;
+    private Status status;
     private Long userId;
     private Long carId;
 }

@@ -1,8 +1,8 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
-import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class BookingController {
     private final BookingService bookingService;
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException, BadRequestException {
-        bookingService.newBooking(request);
+    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException{
+        bookingService.insBooking(request);
     }
     @GetMapping("all")
     @ResponseStatus(HttpStatus.OK)
@@ -32,7 +32,7 @@ public class BookingController {
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
     public void editBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
-        bookingService.editBooking(request);
+        bookingService.insBooking(request);
     }
     @PostMapping("edit/{status}")
     @ResponseStatus(HttpStatus.OK)
@@ -45,9 +45,9 @@ public class BookingController {
         }
 
         if (status.equals("approve")) {
-            request.setStatus(1);
+            request.setStatus(Status.APPROVE);
         } else if (status.equals("decline")) {
-            request.setStatus(2);
+            request.setStatus(Status.DECLINED);
         } else {
             log.info("modifica di stato non riconosciuta");
             throw new ItemNotFoundException("modifica di stato non riconosciuta");

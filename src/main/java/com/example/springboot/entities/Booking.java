@@ -1,5 +1,6 @@
 package com.example.springboot.entities;
 
+import com.example.springboot.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class Booking implements Serializable {
     @Column(nullable = false)
     private LocalDate dateBookingEnd;
     @Column(nullable = false)
-    private int status;
+    private Status status;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "idUser")
     private User user;

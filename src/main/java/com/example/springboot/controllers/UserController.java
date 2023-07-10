@@ -3,7 +3,6 @@ package com.example.springboot.controllers;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
-import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
@@ -38,13 +37,13 @@ public class UserController {
     }
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody UserDTO request) throws BadRequestException {
-        userService.newUser(request);
+    public void insertUser(@RequestBody UserDTO request) {
+        userService.insUser(request);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editUser(@RequestBody UserDTO request) throws ItemNotFoundException {
-        userService.editUser(request);
+    public void editUser(@RequestBody UserDTO request) {
+        userService.insUser(request);
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)

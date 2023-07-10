@@ -1,12 +1,12 @@
 package com.example.springboot.services.impl;
 
+import com.example.springboot.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
 import com.example.springboot.dto.mapper.BookingMapper;
 import com.example.springboot.dto.mapper.CarMapper;
 import com.example.springboot.entities.Booking;
 import com.example.springboot.entities.User;
-import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.repositories.BookingRepository;
 import com.example.springboot.services.BookingService;
@@ -53,31 +53,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
         log.info("inserimento/modifica prenotazione");
+        bookingDTO.setStatus(Status.ToAPPROVE);
 
         Booking booking = bookingMapper.dtoToEntity(bookingDTO);
 
         bookingRepository.save(booking);
-    }
-
-    @Override
-    public void editBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
-        log.info("modifica prenotazione");
-        bookingDTO.setStatus(0);
-
-        if (bookingDTO.getIdBooking() == null) {
-            throw new ItemNotFoundException("prenotazione non trovata");
-        }
-        insBooking(bookingDTO);
-    }
-
-    @Override
-    public void newBooking(BookingDTO bookingDTO) throws BadRequestException, ItemNotFoundException {
-        log.info("inserimento prenotazione");
-
-        if (bookingDTO.getIdBooking() != null) {
-            throw new BadRequestException("tipo di richiesta non suportata");
-        }
-        insBooking(bookingDTO);
     }
 
     @Override

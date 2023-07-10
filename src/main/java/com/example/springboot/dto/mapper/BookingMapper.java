@@ -24,13 +24,7 @@ public class BookingMapper {
 
         booking.setDateBookingEnd(bookingDTO.getEnd());
         booking.setDateBookingStart(bookingDTO.getStart());
-
-        if (bookingDTO.getStatus() == null) {
-            booking.setStatus(0);
-        } else {
-            booking.setStatus(bookingDTO.getStatus());
-        }
-
+        booking.setStatus(bookingDTO.getStatus());
         booking.setUser(userMapper.dtoToEntity(this.userService.getById(bookingDTO.getUserId())));
         booking.setCar(carMapper.dtoToEntity((this.carService.getById(bookingDTO.getCarId()))));
 

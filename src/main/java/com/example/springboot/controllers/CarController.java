@@ -1,7 +1,6 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.CarDTO;
-import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.CarService;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +24,13 @@ public class CarController {
     }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertCar(@RequestBody CarDTO car) throws BadRequestException {
-        carService.newCar(car);
+    public void insertCar(@RequestBody CarDTO car) {
+        carService.insCar(car);
     }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void editCar(@RequestBody CarDTO car) throws ItemNotFoundException {
-        carService.editCar(car);
+    public void editCar(@RequestBody CarDTO car) {
+        carService.insCar(car);
     }
 
     @DeleteMapping("delete/{id}")
