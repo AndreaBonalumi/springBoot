@@ -1,9 +1,10 @@
 package com.example.springboot.services.impl;
 
 import com.example.springboot.dto.BookingDTO;
+import com.example.springboot.dto.CarDTO;
 import com.example.springboot.dto.mapper.BookingMapper;
+import com.example.springboot.dto.mapper.CarMapper;
 import com.example.springboot.entities.Booking;
-import com.example.springboot.entities.Car;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
@@ -24,6 +25,7 @@ import java.util.List;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
+    private final CarMapper carMapper;
     @Override
     public List<BookingDTO> getAll() {
         return bookingRepository.findAll()
@@ -44,8 +46,9 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
     }
     @Override
-    public List<Car> selCarsByDateBooking(LocalDate start, LocalDate end) {
-        return bookingRepository.selCarsByDateBooking(start, end);
+    public List<CarDTO> selCarsByDateBooking(LocalDate start, LocalDate end) {
+        return bookingRepository.selCarsByDateBooking(start, end)
+                .stream().map(carMapper::entityToDto).toList();
     }
     @Override
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {

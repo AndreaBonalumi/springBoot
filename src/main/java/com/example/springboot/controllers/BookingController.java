@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.BookingDTO;
+import com.example.springboot.dto.CarDTO;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -20,12 +24,17 @@ public class BookingController {
     public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException, BadRequestException {
         bookingService.newBooking(request);
     }
+    @GetMapping("all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookingDTO> everyBooking() {
+        return bookingService.getAll();
+    }
     @PutMapping("edit")
     @ResponseStatus(HttpStatus.CREATED)
     public void editBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
         bookingService.editBooking(request);
     }
-    @PostMapping("detail/{status}")
+    @PostMapping("edit/{status}")
     @ResponseStatus(HttpStatus.OK)
     public void changeStatusBooking(@PathVariable("status") String status,
                                     @RequestBody BookingDTO request) throws ItemNotFoundException {
@@ -45,6 +54,11 @@ public class BookingController {
         }
 
         bookingService.insBooking(request);
+    }
+    @GetMapping("byDate")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CarDTO> getAvailableCars(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end) {
+        return bookingService.selCarsByDateBooking(start, end);
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)

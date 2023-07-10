@@ -5,22 +5,16 @@ import com.example.springboot.entities.Booking;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.CarService;
 import com.example.springboot.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class BookingMapper {
     private final UserService userService;
     private final CarService carService;
     private final UserMapper userMapper;
     private final CarMapper carMapper;
-
-    public BookingMapper(UserService userService, CarService carService, UserMapper userMapper, CarMapper carMapper) {
-        this.userService = userService;
-        this.carService = carService;
-        this.userMapper = userMapper;
-        this.carMapper = carMapper;
-    }
-
     public Booking dtoToEntity(BookingDTO bookingDTO) throws ItemNotFoundException {
         Booking booking = new Booking();
 

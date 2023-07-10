@@ -36,7 +36,6 @@ public class UserController {
 
         return bookingService.getByUser(userMapper.dtoToEntity(user));
     }
-
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserDTO request) throws BadRequestException {
