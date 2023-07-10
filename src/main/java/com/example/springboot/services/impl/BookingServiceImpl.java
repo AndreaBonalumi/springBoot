@@ -95,9 +95,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("eliminazione Booking");
 
         BookingDTO booking = getById(id);
-        if (booking.getIdBooking() == null) {
-            throw new ItemNotFoundException("prenotazione non trovata");
-        }
+
         bookingRepository.delete(
                 bookingMapper.newBooking(
                     userMapper.newUser(userService.getById(booking.getUserId())),

@@ -76,10 +76,6 @@ public class UserServiceImpl implements UserService {
 
         UserDTO user = getById(id);
 
-        if (user.getIdUser() == null) {
-            throw new ItemNotFoundException("utente non trovato");
-        }
-
         userRepository.delete(userMapper.newUser(user));
     }
 

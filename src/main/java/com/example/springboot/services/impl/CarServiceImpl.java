@@ -64,11 +64,8 @@ public class CarServiceImpl implements CarService {
     @Override
     public void delCar(long id) throws ItemNotFoundException {
         log.info("********** eliminazione auto : " + id + " **********");
-        CarDTO car = getById(id);
 
-        if (car.getIdCar() == null) {
-            throw new ItemNotFoundException("auto non trovata");
-        }
+        CarDTO car = getById(id);
 
         carRepository.delete(carMapper.newCar(car));
     }
