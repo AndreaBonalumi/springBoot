@@ -19,6 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BookingDTO getBooking(@PathVariable("id") long id) throws ItemNotFoundException {
+        return bookingService.getById(id);
+    }
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException{
@@ -29,12 +34,7 @@ public class BookingController {
     public List<BookingDTO> everyBooking() {
         return bookingService.getAll();
     }
-    @PutMapping("edit")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void editBooking(@RequestBody BookingDTO request) throws ItemNotFoundException {
-        bookingService.insBooking(request);
-    }
-    @PostMapping("edit/{status}")
+    @PostMapping("manage/{status}")
     @ResponseStatus(HttpStatus.OK)
     public void changeStatusBooking(@PathVariable("status") String status,
                                     @RequestBody BookingDTO request) throws ItemNotFoundException {

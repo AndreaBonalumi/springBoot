@@ -19,8 +19,8 @@ public class UserMapper {
         user.setPassword(userDTO.getPassword());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getFirstName() + "." +
-                userDTO.getLastName() + "@si2001.it");
+        user.setEmail(userDTO.getFirstName().trim() + "." +
+                userDTO.getLastName().trim() + "@si2001.it");
         user.setAdmin(userDTO.isAdmin());
         user.setBd(userDTO.getBirthday());
         user.setDrivingLicense(userDTO.getDrivingLicense());
@@ -39,8 +39,7 @@ public class UserMapper {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setPassword(user.getPassword());
-        userDTO.setEmail(user.getFirstName() + "."
-        + user.getLastName() + "@si2001.it");
+        userDTO.setEmail(user.getEmail());
         userDTO.setBirthday(user.getBd());
         userDTO.setDrivingLicense(user.getDrivingLicense());
 

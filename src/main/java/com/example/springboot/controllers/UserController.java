@@ -26,6 +26,11 @@ public class UserController {
     public List<UserDTO> allCars() {
         return userService.getAll();
     }
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUser(@PathVariable("id") long id) throws ItemNotFoundException {
+        return userService.getById(id);
+    }
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
@@ -38,11 +43,6 @@ public class UserController {
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserDTO request) {
-        userService.insUser(request);
-    }
-    @PutMapping("edit")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void editUser(@RequestBody UserDTO request) {
         userService.insUser(request);
     }
     @DeleteMapping("delete/{id}")

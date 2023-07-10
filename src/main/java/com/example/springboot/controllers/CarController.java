@@ -16,7 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
-
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CarDTO getCar(@PathVariable("id") long id) throws ItemNotFoundException {
+        return carService.getById(id);
+    }
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
     public List<CarDTO> allCars() {
@@ -27,12 +31,6 @@ public class CarController {
     public void insertCar(@RequestBody CarDTO car) {
         carService.insCar(car);
     }
-    @PutMapping("edit")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void editCar(@RequestBody CarDTO car) {
-        carService.insCar(car);
-    }
-
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCar(@PathVariable("id") long id) throws ItemNotFoundException {
