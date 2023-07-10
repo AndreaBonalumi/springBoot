@@ -20,5 +20,5 @@ public class UserDTO {
     private String email;
     private LocalDate birthday;
     private boolean admin = false;
-    private String nPatente;
+    private String drivingLicense;
 }

@@ -8,23 +8,26 @@ import java.time.LocalDate;
 
 @Component
 public class UserMapper {
-    public User newUser(UserDTO userRequest) {
+    public User newUser(UserDTO userDTO) {
         User user = new User();
 
-        if (userRequest.getIdUser() != null) {
-            user.setIdUser(userRequest.getIdUser());
+        if (userDTO.getIdUser() != null) {
+            user.setIdUser(userDTO.getIdUser());
         }
 
-        user.setUsername(userRequest.getUsername());
-        user.setPassword(userRequest.getPassword());
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setEmail(user.getFirstName() + "." +
-                userRequest.getLastName() + "@si2001.it");
-        user.setAdmin(userRequest.isAdmin());
-        user.setBd(userRequest.getBirthday());
-        user.setNPatente(userRequest.getNPatente());
-        user.setCreated(LocalDate.now());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getFirstName() + "." +
+                userDTO.getLastName() + "@si2001.it");
+        user.setAdmin(userDTO.isAdmin());
+        user.setBd(userDTO.getBirthday());
+        user.setDrivingLicense(userDTO.getDrivingLicense());
+
+        if (userDTO.getIdUser() == null) {
+            user.setCreated(LocalDate.now());
+        }
 
         return user;
     }
@@ -39,7 +42,7 @@ public class UserMapper {
         userDTO.setEmail(user.getFirstName() + "."
         + user.getLastName() + "@si2001.it");
         userDTO.setBirthday(user.getBd());
-        userDTO.setNPatente(user.getNPatente());
+        userDTO.setDrivingLicense(user.getDrivingLicense());
 
         return userDTO;
     }

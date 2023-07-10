@@ -30,7 +30,7 @@ public class User {
     private boolean admin;
     @Column(nullable = false)
     private String email;
-    private String nPatente;
+    private String drivingLicense;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Booking> bookings = new HashSet<>();
 

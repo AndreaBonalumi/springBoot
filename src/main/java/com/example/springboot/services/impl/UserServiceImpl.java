@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,12 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAll() {
-        List<User> users = userRepository.findAll();
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for (User user : users) {
-            userDTOList.add(userMapper.newUserDto(user));
-        }
-        return userDTOList;
+        return userRepository.findAll()
+                .stream().map(userMapper::newUserDto).toList();
     }
 
     @Override
