@@ -2,20 +2,15 @@ package com.example.springboot.dto.mapper;
 
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.entities.Booking;
-import com.example.springboot.exceptions.ItemNotFoundException;
-import com.example.springboot.services.CarService;
-import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class BookingMapper {
-    private final UserService userService;
-    private final CarService carService;
     private final UserMapper userMapper;
     private final CarMapper carMapper;
-    public Booking dtoToEntity(BookingDTO bookingDTO) throws ItemNotFoundException {
+    public Booking dtoToEntity(BookingDTO bookingDTO){
         Booking booking = new Booking();
 
         if (bookingDTO.getIdBooking() != null) {
@@ -25,8 +20,8 @@ public class BookingMapper {
         booking.setDateBookingEnd(bookingDTO.getEnd());
         booking.setDateBookingStart(bookingDTO.getStart());
         booking.setStatus(bookingDTO.getStatus());
-        booking.setUser(userMapper.dtoToEntity(this.userService.getById(bookingDTO.getUserId())));
-        booking.setCar(carMapper.dtoToEntity((this.carService.getById(bookingDTO.getCarId()))));
+        booking.setUser(userMapper.dtoToEntity(bookingDTO.getUser()));
+        booking.setCar(carMapper.dtoToEntity(bookingDTO.getCar()));
 
         return booking;
     }
@@ -36,8 +31,8 @@ public class BookingMapper {
         bookingDTO.setStart(booking.getDateBookingStart());
         bookingDTO.setEnd(booking.getDateBookingEnd());
         bookingDTO.setStatus(booking.getStatus());
-        bookingDTO.setUserId(booking.getUser().getIdUser());
-        bookingDTO.setCarId(booking.getCar().getIdCar());
+        bookingDTO.setUser(userMapper.entityToDto(booking.getUser()));
+        bookingDTO.setCar(carMapper.entityToDto(booking.getCar()));
 
         return bookingDTO;
     }
