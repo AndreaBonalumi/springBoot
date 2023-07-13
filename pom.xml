@@ -75,21 +75,6 @@
             <version>1.1.1.RELEASE</version>
         </dependency>
 
-
-        <!--        per l'estensione della classe di configurazione-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring.security}</version>
-        </dependency>
-
-<!--        per una libreria che utilizza il configuratore di spring security (javax.servlet.filter)-->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
         <!-- JSON Web Token -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

@@ -8,9 +8,6 @@ import com.example.springboot.repositories.UserRepository;
 import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,16 +31,6 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAll() {
         return userRepository.findAll()
                 .stream().map(userMapper::entityToDto).toList();
-    }
-    @Override
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("user non trovato"));
-            }
-        };
     }
     @Override
     public void insUser(UserDTO userDTO) {
