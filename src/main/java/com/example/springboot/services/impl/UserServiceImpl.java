@@ -8,6 +8,7 @@ import com.example.springboot.repositories.UserRepository;
 import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public UserDTO getById(long id) throws ItemNotFoundException {
 
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void insUser(UserDTO userDTO) {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userMapper.dtoToEntity(userDTO));
     }
     @Override

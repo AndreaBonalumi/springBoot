@@ -1,4 +1,4 @@
-package com.example.springboot.services.jpaUserService;
+package com.example.springboot.services.impl;
 
 import com.example.springboot.repositories.UserRepository;
 import com.example.springboot.dto.userSecurity.UserSecurity;

@@ -1,6 +1,6 @@
 package com.example.springboot.security.config;
 
-import com.example.springboot.services.jpaUserService.JpaUserDetailsService;
+import com.example.springboot.services.impl.JpaUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
