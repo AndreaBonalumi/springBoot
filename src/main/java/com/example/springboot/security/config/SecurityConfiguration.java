@@ -22,6 +22,14 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     private final JpaUserDetailsService jpaUserDetailsService;
+    private static final String[] ADMIN_MATCHER = {
+            "/user/delete/**",
+            "/car/manage/**",
+            "/car/delete/**",
+            "/user/detail/**",
+            "/user/filter",
+            "/car/all"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +40,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/**")
                         .permitAll()
                         .anyRequest()
-                        .authenticated())
+                        .authenticated()
+                        .requestMatchers(ADMIN_MATCHER).hasRole("ADMIN")
+                        .requestMatchers("/booking/**").hasAnyRole("USER", "ADMIN"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(jpaUserDetailsService)
