@@ -1,4 +1,4 @@
-package com.example.springboot.dto.userSecurity;
+package com.example.springboot.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

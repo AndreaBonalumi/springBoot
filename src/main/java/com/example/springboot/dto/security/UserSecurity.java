@@ -1,4 +1,4 @@
-package com.example.springboot.dto.userSecurity;
+package com.example.springboot.dto.security;
 
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;

@@ -3,7 +3,8 @@ package com.example.springboot.controllers;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
-import com.example.springboot.dto.userSecurity.AuthenticationRequest;
+import com.example.springboot.dto.security.AuthenticationRequest;
+import com.example.springboot.dto.security.AuthenticationResponse;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.security.config.JwtUtils;
 import com.example.springboot.services.BookingService;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword(),
@@ -72,7 +72,7 @@ public class UserController {
             final UserDetails user = jpaUserDetailsService.loadUserByUsername(request.getUsername());
             if (user != null) {
                 String jwt = jwtUtils.generateToken(user);
-                return ResponseEntity.ok(jwt);
+                return ResponseEntity.ok(AuthenticationResponse.builder().jwt(jwt).build());
             }
             return ResponseEntity.status(400).body("Error authenticating");
         } catch (Exception e) {
