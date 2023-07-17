@@ -16,7 +16,7 @@ public class UserSecurity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return isAdmin ? List.of(new SimpleGrantedAuthority("ADMIN")) : List.of(new SimpleGrantedAuthority("USER"));
+        return isAdmin ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN")) : List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

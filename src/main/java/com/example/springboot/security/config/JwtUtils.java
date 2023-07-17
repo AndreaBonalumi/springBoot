@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtils {
-    private final String SECRET_KEY = "lfjgnwlefjlgjlenvklefwnvklefnvenjvenfvlkrn3nrjnvjrfvnkjrklefijefvirhvbwjhefhgxmguhxeicwdicmiejgnifenvoielfvoirtgbnoirenbtnbijrthbut4orivmirjehnuotrvmiorhnuto4irvmornhrivmfehngoijwdmcirjnvmodmcirnvuhtnbivmocmrfinrivmenvitnbuhtnvijrmvirngtutn";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -61,8 +60,9 @@ public class JwtUtils {
     }
 
     private Key getKey() {
+        String SECRET_KEY = "lfjgnwlefjlgjlenvklefwnvklefnvenjvenfvlkrn3nrjnvjrfvnkjrklefijefvirhvbwjhefhgxmguhxeicwdicmiejgnifenvoielfvoirtgbnoirenbtnbijrthbut4orivmirjehnuotrvmiorhnuto4irvmornhrivmfehngoijwdmcirjnvmodmcirnvuhtnbivmocmrfinrivmenvitnbuhtnvijrmvirngtutn";
         return Keys.hmacShaKeyFor(
-                Decoders.BASE64.decode(this.SECRET_KEY)
+                Decoders.BASE64.decode(SECRET_KEY)
         );
     }
 }

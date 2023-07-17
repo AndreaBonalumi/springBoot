@@ -53,8 +53,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
         log.info("inserimento/modifica prenotazione");
-        bookingDTO.setStatus(Status.ToAPPROVE);
-
         Booking booking = bookingMapper.dtoToEntity(bookingDTO);
 
         bookingRepository.save(booking);

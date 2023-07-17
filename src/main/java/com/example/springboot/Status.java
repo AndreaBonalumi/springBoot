@@ -1,7 +1,7 @@
 package com.example.springboot;
 
 public enum Status {
-    APPROVE("Approvato"),
+    APPROVED("Approvato"),
     DECLINED("Rifiutato"),
     ToAPPROVE("Da approvare");
 

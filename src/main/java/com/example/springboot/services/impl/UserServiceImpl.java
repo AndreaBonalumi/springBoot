@@ -34,6 +34,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll()
                 .stream().map(userMapper::entityToDto).toList();
     }
+
+    @Override
+    public UserDTO getByUsername(String username) throws ItemNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
+        return userMapper.entityToDto(user);
+    }
+
     @Override
     public void insUser(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));

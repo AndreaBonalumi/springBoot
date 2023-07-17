@@ -8,6 +8,7 @@ import java.util.List;
 public interface UserService {
     UserDTO getById(long id) throws ItemNotFoundException;
     List<UserDTO> getAll();
+    UserDTO getByUsername(String username) throws ItemNotFoundException;
     void insUser(UserDTO userDTO);
     void delUser(long id) throws ItemNotFoundException;
 }

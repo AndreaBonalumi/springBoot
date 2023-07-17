@@ -27,6 +27,8 @@ public class BookingController {
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException{
+        request.setStatus(Status.ToAPPROVE);
+
         bookingService.insBooking(request);
     }
     @GetMapping("all")
@@ -45,7 +47,7 @@ public class BookingController {
         }
 
         if (status.equals("approve")) {
-            request.setStatus(Status.APPROVE);
+            request.setStatus(Status.APPROVED);
         } else if (status.equals("decline")) {
             request.setStatus(Status.DECLINED);
         } else {

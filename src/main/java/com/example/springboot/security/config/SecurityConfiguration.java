@@ -32,8 +32,8 @@ public class SecurityConfiguration {
             "/user/delete/**",
             "/car/manage/**",
             "/car/delete/**",
-            "/user/detail/**",
             "/user/filter",
+            "user/insert",
             "/car/all"
     };
 
@@ -46,7 +46,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/user/authenticate")
                         .permitAll()
                         .requestMatchers(ADMIN_MATCHER).hasRole("ADMIN")
-                        .requestMatchers("/booking/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

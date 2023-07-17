@@ -52,6 +52,11 @@ public class UserController {
 
         return bookingService.getByUser(userMapper.dtoToEntity(user));
     }
+    @GetMapping("username/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getByUsername (@PathVariable("username")String username) throws ItemNotFoundException {
+        return userService.getByUsername(username);
+    }
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserDTO request) {
@@ -72,7 +77,10 @@ public class UserController {
             final UserDetails user = jpaUserDetailsService.loadUserByUsername(request.getUsername());
             if (user != null) {
                 String jwt = jwtUtils.generateToken(user);
-                return ResponseEntity.ok(AuthenticationResponse.builder().jwt(jwt).build());
+                return ResponseEntity.ok(AuthenticationResponse.builder()
+                        .jwt(jwt)
+                        .username(jwtUtils.extractUsername(jwt))
+                        .build());
             }
             return ResponseEntity.status(400).body("Error authenticating");
         } catch (Exception e) {

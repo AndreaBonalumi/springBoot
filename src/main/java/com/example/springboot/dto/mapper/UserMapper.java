@@ -38,7 +38,7 @@ public class UserMapper {
         userDTO.setAdmin(user.isAdmin());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        userDTO.setPassword(user.getPassword());
+        userDTO.setPassword("");
         userDTO.setEmail(user.getEmail());
         userDTO.setBirthday(user.getBd());
         userDTO.setDrivingLicense(user.getDrivingLicense());
