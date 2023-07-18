@@ -51,6 +51,9 @@ public class BookingController {
             throws ItemNotFoundException, BadRequestException {
 
         UserResponse userResponse = userService.getById(request.getUserId());
+        if (request.getStart().isAfter(request.getEnd())) {
+            throw new BadRequestException("errore nell'inserimento delle date");
+        }
 
         if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
             request.setStatus(Status.TOAPPROVE);
