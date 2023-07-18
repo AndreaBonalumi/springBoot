@@ -3,7 +3,7 @@ package com.example.springboot;
 public enum Status {
     APPROVED("Approvato"),
     DECLINED("Rifiutato"),
-    ToAPPROVE("Da approvare");
+    TOAPPROVE("Da approvare");
 
     private final String value;
 

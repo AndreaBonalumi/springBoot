@@ -16,11 +16,10 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByUser(User user);
     Optional<Booking> findByIdBooking(long id) throws ItemNotFoundException;
-    @Query("select c from Car c where not exists (select b from Booking b where b.car = c" +
+    @Query("select c from Car c where not exists (select b from Booking b where b.car = c and b.status != 1" +
             " and ((b.dateBookingStart between :start and :end)" +
                 " or (b.dateBookingEnd between :start and :end)" +
                 " or (:start between b.dateBookingStart and b.dateBookingEnd)" +
-                " or (:end between b.dateBookingStart and b.dateBookingEnd)" +
-                " or b.status != 2))")
+                " or (:end between b.dateBookingStart and b.dateBookingEnd)))")
     List<Car> selCarsByDateBooking(LocalDate start, LocalDate end);
 }

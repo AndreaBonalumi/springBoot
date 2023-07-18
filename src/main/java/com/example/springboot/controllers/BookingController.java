@@ -53,7 +53,7 @@ public class BookingController {
         UserResponse userResponse = userService.getById(request.getUserId());
 
         if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            request.setStatus(Status.ToAPPROVE);
+            request.setStatus(Status.TOAPPROVE);
 
             bookingService.insBooking(request);
         }
@@ -73,11 +73,13 @@ public class BookingController {
                                     @RequestBody BookingDTO request) throws ItemNotFoundException {
         log.info("approvazione o rifiuto della prenotazione");
 
+        status = status.toLowerCase();
+
         if (request.getIdBooking() == null) {
             throw new ItemNotFoundException("prenotazione non trovata");
         }
 
-        if (status.equals("approve")) {
+        if (status.equals("approved")) {
             request.setStatus(Status.APPROVED);
         } else if (status.equals("decline")) {
             request.setStatus(Status.DECLINED);

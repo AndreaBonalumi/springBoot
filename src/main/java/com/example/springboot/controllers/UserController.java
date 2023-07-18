@@ -82,8 +82,17 @@ public class UserController {
 
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody UserRequest request) {
-        userService.insUser(request);
+    public void insertUser(@RequestBody UserRequest request,
+                           @AuthenticationPrincipal UserDetails userDetails)
+            throws BadRequestException {
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(request.getUsername())) {
+            userService.insUser(request);
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
+
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
