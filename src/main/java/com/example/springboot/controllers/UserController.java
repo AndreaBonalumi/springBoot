@@ -6,6 +6,7 @@ import com.example.springboot.dto.UserResponse;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.dto.security.AuthenticationRequest;
 import com.example.springboot.dto.security.AuthenticationResponse;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.security.config.JwtUtils;
 import com.example.springboot.services.BookingService;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +37,10 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JpaUserDetailsService jpaUserDetailsService;
     private final JwtUtils jwtUtils;
-    @GetMapping(value = "username")
-    public String getUsername(@AuthenticationPrincipal UserDetails userDetails) {
-        return userDetails.getUsername();
+
+    @GetMapping(value = "userUsername")
+    public UserResponse getUsername(@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
+        return userService.getByUsername(userDetails.getUsername());
     }
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
@@ -46,15 +49,35 @@ public class UserController {
     }
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getUser(@PathVariable("id") long id) throws ItemNotFoundException {
-        return userService.getById(id);
+    public UserResponse getUser(@PathVariable("id") long id,
+                                @AuthenticationPrincipal UserDetails userDetails)
+            throws ItemNotFoundException, BadRequestException {
+
+        UserResponse userResponse = userService.getById(id);
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
+            return userResponse;
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
+
     }
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
+    public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id,
+                                               @AuthenticationPrincipal UserDetails userDetails)
+            throws ItemNotFoundException, BadRequestException {
+
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
-        return bookingService.getByUser(userMapper.responseToEntity(id));
+        UserResponse userResponse = userService.getById(id);
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
+            return bookingService.getByUser(userMapper.responseToEntity(id));
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
+
     }
     @GetMapping("username/{username}")
     @ResponseStatus(HttpStatus.OK)

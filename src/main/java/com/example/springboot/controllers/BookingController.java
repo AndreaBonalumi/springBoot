@@ -3,11 +3,17 @@ package com.example.springboot.controllers;
 import com.example.springboot.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
+import com.example.springboot.dto.UserResponse;
+import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.BookingService;
+import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,17 +25,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
+    private final UserService userService;
+
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BookingDTO getBooking(@PathVariable("id") long id) throws ItemNotFoundException {
-        return bookingService.getById(id);
+    public BookingDTO getBooking(@PathVariable("id") long id,
+                                 @AuthenticationPrincipal UserDetails userDetails)
+            throws ItemNotFoundException, BadRequestException {
+
+        BookingDTO bookingDTO = bookingService.getById(id);
+        UserResponse userResponse = userService.getById(bookingDTO.getUserId());
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
+            return bookingDTO;
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
+
     }
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertBooking(@RequestBody BookingDTO request) throws ItemNotFoundException{
-        request.setStatus(Status.ToAPPROVE);
+    public void insertBooking(@RequestBody BookingDTO request,
+                              @AuthenticationPrincipal UserDetails userDetails)
+            throws ItemNotFoundException, BadRequestException {
 
-        bookingService.insBooking(request);
+        UserResponse userResponse = userService.getById(request.getUserId());
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
+            request.setStatus(Status.ToAPPROVE);
+
+            bookingService.insBooking(request);
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
+
     }
     @GetMapping("all")
     @ResponseStatus(HttpStatus.OK)
@@ -64,7 +95,18 @@ public class BookingController {
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBooking(@PathVariable("id") long id) throws ItemNotFoundException {
-        bookingService.delBooking(id);
+    public void deleteBooking(@PathVariable("id") long id,
+                              @AuthenticationPrincipal UserDetails userDetails)
+            throws ItemNotFoundException, BadRequestException {
+
+        BookingDTO bookingDTO = bookingService.getById(id);
+        UserResponse userResponse = userService.getById(bookingDTO.getUserId());
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
+            bookingService.delBooking(id);
+        }
+        else {
+            throw new BadRequestException("non hai le autorizzazioni per accedere");
+        }
     }
 }

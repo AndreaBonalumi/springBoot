@@ -30,11 +30,12 @@ public class SecurityConfiguration {
     private final JpaUserDetailsService jpaUserDetailsService;
     private static final String[] ADMIN_MATCHER = {
             "/user/delete/**",
-            "/car/manage/**",
-            "/car/delete/**",
+            "/car/**",
+            "/booking/all",
+            "/booking/manage/**",
             "/user/filter",
-            "user/insert",
-            "/car/all"
+            "/user/insert",
+            "/user/all",
     };
 
     @Bean
