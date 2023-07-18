@@ -1,7 +1,8 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.BookingDTO;
-import com.example.springboot.dto.UserDTO;
+import com.example.springboot.dto.UserRequest;
+import com.example.springboot.dto.UserResponse;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.dto.security.AuthenticationRequest;
 import com.example.springboot.dto.security.AuthenticationResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,14 +35,18 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JpaUserDetailsService jpaUserDetailsService;
     private final JwtUtils jwtUtils;
+    @GetMapping(value = "username")
+    public String getUsername(@AuthenticationPrincipal UserDetails userDetails) {
+        return userDetails.getUsername();
+    }
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> allCars() {
+    public List<UserResponse> allCars() {
         return userService.getAll();
     }
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUser(@PathVariable("id") long id) throws ItemNotFoundException {
+    public UserResponse getUser(@PathVariable("id") long id) throws ItemNotFoundException {
         return userService.getById(id);
     }
     @GetMapping("detail/{id}")
@@ -48,18 +54,16 @@ public class UserController {
     public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id) throws ItemNotFoundException {
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
-        UserDTO user = userService.getById(id);
-
-        return bookingService.getByUser(userMapper.dtoToEntity(user));
+        return bookingService.getByUser(userMapper.responseToEntity(id));
     }
     @GetMapping("username/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getByUsername (@PathVariable("username")String username) throws ItemNotFoundException {
+    public UserResponse getByUsername (@PathVariable("username")String username) throws ItemNotFoundException {
         return userService.getByUsername(username);
     }
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody UserDTO request) {
+    public void insertUser(@RequestBody UserRequest request) {
         userService.insUser(request);
     }
     @DeleteMapping("delete/{id}")
@@ -79,7 +83,6 @@ public class UserController {
                 String jwt = jwtUtils.generateToken(user);
                 return ResponseEntity.ok(AuthenticationResponse.builder()
                         .jwt(jwt)
-                        .username(jwtUtils.extractUsername(jwt))
                         .build());
             }
             return ResponseEntity.status(400).body("Error authenticating");

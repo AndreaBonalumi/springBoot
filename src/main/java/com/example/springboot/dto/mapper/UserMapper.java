@@ -1,48 +1,56 @@
 package com.example.springboot.dto.mapper;
 
-import com.example.springboot.dto.UserDTO;
+import com.example.springboot.dto.UserRequest;
+import com.example.springboot.dto.UserResponse;
 import com.example.springboot.entities.User;
+import com.example.springboot.exceptions.ItemNotFoundException;
+import com.example.springboot.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
-    public User dtoToEntity(UserDTO userDTO) {
+    private final UserRepository userRepository;
+    public User requestToEntity(UserRequest useruserRequest) {
         User user = new User();
 
-        if (userDTO.getIdUser() != null) {
-            user.setIdUser(userDTO.getIdUser());
+        if (useruserRequest.getIdUser() != null) {
+            user.setIdUser(useruserRequest.getIdUser());
         }
 
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getFirstName().trim() + "." +
-                userDTO.getLastName().trim() + "@si2001.it");
-        user.setAdmin(userDTO.isAdmin());
-        user.setBd(userDTO.getBirthday());
-        user.setDrivingLicense(userDTO.getDrivingLicense());
+        user.setUsername(useruserRequest.getUsername());
+        user.setPassword(useruserRequest.getPassword());
+        user.setFirstName(useruserRequest.getFirstName());
+        user.setLastName(useruserRequest.getLastName());
+        user.setEmail(useruserRequest.getFirstName().trim() + "." +
+                useruserRequest.getLastName().trim() + "@si2001.it");
+        user.setAdmin(useruserRequest.isAdmin());
+        user.setBd(useruserRequest.getBirthday());
+        user.setDrivingLicense(useruserRequest.getDrivingLicense());
 
-        if (userDTO.getIdUser() == null) {
+        if (useruserRequest.getIdUser() == null) {
             user.setCreated(LocalDate.now());
         }
 
         return user;
     }
-    public UserDTO entityToDto(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setIdUser(user.getIdUser());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setAdmin(user.isAdmin());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setPassword("");
-        userDTO.setEmail(user.getEmail());
-        userDTO.setBirthday(user.getBd());
-        userDTO.setDrivingLicense(user.getDrivingLicense());
+    public UserResponse entityToResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setIdUser(user.getIdUser());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setAdmin(user.isAdmin());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setDrivingLicense(user.getDrivingLicense());
 
-        return userDTO;
+        return userResponse;
+    }
+    public User responseToEntity(long id) throws ItemNotFoundException {
+        return userRepository.findByIdUser(id)
+                .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
     }
 }

@@ -17,6 +17,6 @@ public class BookingDTO {
     private LocalDate start;
     private LocalDate end;
     private Status status;
-    private UserDTO user;
+    private long userId;
     private CarDTO car;
 }

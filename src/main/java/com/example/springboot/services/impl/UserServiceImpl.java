@@ -1,6 +1,7 @@
 package com.example.springboot.services.impl;
 
-import com.example.springboot.dto.UserDTO;
+import com.example.springboot.dto.UserRequest;
+import com.example.springboot.dto.UserResponse;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.ItemNotFoundException;
@@ -23,36 +24,36 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public UserDTO getById(long id) throws ItemNotFoundException {
+    public UserResponse getById(long id) throws ItemNotFoundException {
 
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.entityToDto(user);
+        return userMapper.entityToResponse(user);
     }
     @Override
-    public List<UserDTO> getAll() {
+    public List<UserResponse> getAll() {
         return userRepository.findAll()
-                .stream().map(userMapper::entityToDto).toList();
+                .stream().map(userMapper::entityToResponse).toList();
     }
 
     @Override
-    public UserDTO getByUsername(String username) throws ItemNotFoundException {
+    public UserResponse getByUsername(String username) throws ItemNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.entityToDto(user);
+        return userMapper.entityToResponse(user);
     }
 
     @Override
-    public void insUser(UserDTO userDTO) {
+    public void insUser(UserRequest userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(userMapper.dtoToEntity(userDTO));
+        userRepository.save(userMapper.requestToEntity(userDTO));
     }
     @Override
     public void delUser(long id) throws ItemNotFoundException {
         log.info("eliminazione user");
 
-        UserDTO user = getById(id);
+        UserResponse user = getById(id);
 
-        userRepository.delete(userMapper.dtoToEntity(user));
+        userRepository.deleteById(user.getIdUser());
     }
 }
