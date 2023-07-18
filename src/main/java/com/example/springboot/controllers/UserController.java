@@ -37,11 +37,6 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JpaUserDetailsService jpaUserDetailsService;
     private final JwtUtils jwtUtils;
-
-    @GetMapping(value = "userUsername")
-    public UserResponse getUsername(@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
-        return userService.getByUsername(userDetails.getUsername());
-    }
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
     public List<UserResponse> allCars() {
@@ -79,11 +74,12 @@ public class UserController {
         }
 
     }
-    @GetMapping("username/{username}")
+    @GetMapping("username")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getByUsername (@PathVariable("username")String username) throws ItemNotFoundException {
-        return userService.getByUsername(username);
+    public UserResponse getByUsername (@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException, BadRequestException {
+        return userService.getByUsername(userDetails.getUsername());
     }
+
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserRequest request) {
