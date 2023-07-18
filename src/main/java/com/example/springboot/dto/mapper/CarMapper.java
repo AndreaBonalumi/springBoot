@@ -23,6 +23,11 @@ public class CarMapper {
         car.setLink(carRequest.getLink());
         car.setYear(carRequest.getYear());
         car.setCreated(LocalDate.now());
+        if (carRequest.getCreatedBy() != null) {
+            car.setCreatedBy(carRequest.getCreatedBy());
+        } else {
+            car.setCreatedBy(0);
+        }
 
         return car;
     }
@@ -36,6 +41,7 @@ public class CarMapper {
         carDTO.setPlate(car.getPlate());
         carDTO.setLink(car.getLink());
         carDTO.setYear(car.getYear());
+        carDTO.setCreatedBy(carDTO.getCreatedBy());
 
         return carDTO;
     }

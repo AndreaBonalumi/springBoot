@@ -14,24 +14,25 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class UserMapper {
     private final UserRepository userRepository;
-    public User requestToEntity(UserRequest useruserRequest) {
+    public User requestToEntity(UserRequest userRequest) {
         User user = new User();
 
-        if (useruserRequest.getIdUser() != null) {
-            user.setIdUser(useruserRequest.getIdUser());
+        if (userRequest.getIdUser() != null) {
+            user.setIdUser(userRequest.getIdUser());
         }
 
-        user.setUsername(useruserRequest.getUsername());
-        user.setPassword(useruserRequest.getPassword());
-        user.setFirstName(useruserRequest.getFirstName());
-        user.setLastName(useruserRequest.getLastName());
-        user.setEmail(useruserRequest.getFirstName().trim() + "." +
-                useruserRequest.getLastName().trim() + "@si2001.it");
-        user.setAdmin(useruserRequest.isAdmin());
-        user.setBd(useruserRequest.getBirthday());
-        user.setDrivingLicense(useruserRequest.getDrivingLicense());
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(userRequest.getPassword());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getFirstName().trim() + "." +
+                userRequest.getLastName().trim() + "@si2001.it");
+        user.setAdmin(userRequest.isAdmin());
+        user.setBd(userRequest.getBirthday());
+        user.setDrivingLicense(userRequest.getDrivingLicense());
+        user.setCreatedBy(userRequest.getCreatedBy());
 
-        if (useruserRequest.getIdUser() == null) {
+        if (userRequest.getIdUser() == null) {
             user.setCreated(LocalDate.now());
         }
 
@@ -46,6 +47,7 @@ public class UserMapper {
         userResponse.setLastName(user.getLastName());
         userResponse.setEmail(user.getEmail());
         userResponse.setDrivingLicense(user.getDrivingLicense());
+        userResponse.setCreatedBy(user.getCreatedBy());
 
         return userResponse;
     }

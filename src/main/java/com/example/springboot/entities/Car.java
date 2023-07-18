@@ -32,6 +32,8 @@ public class Car implements Serializable {
     @Column(nullable = false)
     private String description;
     private String link;
+    @Column(nullable = false)
+    private long createdBy;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "car", orphanRemoval = true)
     private Set<Booking> bookings = new HashSet<>();
 }

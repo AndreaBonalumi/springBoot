@@ -18,4 +18,5 @@ public class CarDTO {
     private String description;
     private String link;
     private Integer year;
+    private Long createdBy;
 }

@@ -18,4 +18,5 @@ public class UserResponse {
     private String email;
     private boolean admin;
     private String drivingLicense;
+    private Long createdBy;
 }

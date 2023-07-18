@@ -76,7 +76,7 @@ public class UserController {
     }
     @GetMapping("username")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getByUsername (@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException, BadRequestException {
+    public UserResponse getByUsername (@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
         return userService.getByUsername(userDetails.getUsername());
     }
 

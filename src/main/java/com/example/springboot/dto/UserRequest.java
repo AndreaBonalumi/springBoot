@@ -18,4 +18,5 @@ public class UserRequest {
     private LocalDate birthday;
     private boolean admin = false;
     private String drivingLicense;
+    private Long createdBy;
 }
