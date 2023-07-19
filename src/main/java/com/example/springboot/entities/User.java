@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -34,4 +37,6 @@ public class User {
     @Column(unique = true)
     @Pattern(regexp = "[a-zA-Z]+", message = "la patente deve conenere solo lettere")
     private String drivingLicense;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    private Set<Booking> bookings = new HashSet<>();
 }
