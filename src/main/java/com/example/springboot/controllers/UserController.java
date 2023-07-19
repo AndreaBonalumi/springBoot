@@ -6,8 +6,8 @@ import com.example.springboot.dto.UserResponse;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.dto.security.AuthenticationRequest;
 import com.example.springboot.dto.security.AuthenticationResponse;
-import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
+import com.example.springboot.exceptions.NoAuthException;
 import com.example.springboot.security.config.JwtUtils;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
@@ -46,32 +46,29 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponse getUser(@PathVariable("id") long id,
                                 @AuthenticationPrincipal UserDetails userDetails)
-            throws ItemNotFoundException, BadRequestException {
+            throws ItemNotFoundException {
 
         UserResponse userResponse = userService.getById(id);
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            return userResponse;
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+
+        checkAuthorities(userResponse.getUsername(), userDetails);
+
+        return userResponse;
+
 
     }
     @GetMapping("detail/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDTO> getBookingsByUser (@PathVariable("id") long id,
                                                @AuthenticationPrincipal UserDetails userDetails)
-            throws ItemNotFoundException, BadRequestException {
+            throws ItemNotFoundException {
 
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
         UserResponse userResponse = userService.getById(id);
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            return bookingService.getByUser(userMapper.responseToEntity(id));
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+
+        checkAuthorities(userResponse.getUsername(), userDetails);
+
+        return bookingService.getByUser(userMapper.responseToEntity(id));
 
     }
     @GetMapping("username")
@@ -83,15 +80,11 @@ public class UserController {
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertUser(@RequestBody UserRequest request,
-                           @AuthenticationPrincipal UserDetails userDetails)
-            throws BadRequestException {
+                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(request.getUsername())) {
-            userService.insUser(request);
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+        checkAuthorities(request.getUsername(), userDetails);
+
+        userService.insUser(request);
 
     }
     @DeleteMapping("delete/{id}")
@@ -117,5 +110,13 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(400).body("" + e.getMessage());
         }
+    }
+    private void checkAuthorities(String username,
+                                  UserDetails userDetails) throws NoAuthException {
+        if (!(userDetails.getAuthorities().contains(
+                new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(username))) {
+            throw new NoAuthException("non possiedi le autorizzazioni per effettuare questa operazione, riautenticati");
+        }
+
     }
 }

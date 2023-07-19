@@ -1,6 +1,6 @@
 package com.example.springboot.entities;
 
-import com.example.springboot.Status;
+import com.example.springboot.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 

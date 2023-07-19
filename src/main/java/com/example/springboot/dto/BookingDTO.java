@@ -1,6 +1,6 @@
 package com.example.springboot.dto;
 
-import com.example.springboot.Status;
+import com.example.springboot.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

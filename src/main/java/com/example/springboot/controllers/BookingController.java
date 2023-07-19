@@ -1,11 +1,12 @@
 package com.example.springboot.controllers;
 
-import com.example.springboot.Status;
+import com.example.springboot.enums.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
 import com.example.springboot.dto.UserResponse;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
+import com.example.springboot.exceptions.NoAuthException;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,38 +32,30 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public BookingDTO getBooking(@PathVariable("id") long id,
                                  @AuthenticationPrincipal UserDetails userDetails)
-            throws ItemNotFoundException, BadRequestException {
+            throws ItemNotFoundException {
 
         BookingDTO bookingDTO = bookingService.getById(id);
         UserResponse userResponse = userService.getById(bookingDTO.getUserId());
 
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            return bookingDTO;
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+        checkAuthorities(userResponse.getUsername(), userDetails);
+        return bookingDTO;
 
     }
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
     public void insertBooking(@RequestBody BookingDTO request,
                               @AuthenticationPrincipal UserDetails userDetails)
-            throws ItemNotFoundException, BadRequestException {
+            throws ItemNotFoundException {
 
         UserResponse userResponse = userService.getById(request.getUserId());
         if (request.getStart().isAfter(request.getEnd())) {
             throw new BadRequestException("errore nell'inserimento delle date");
         }
 
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            request.setStatus(Status.TOAPPROVE);
+        checkAuthorities(userResponse.getUsername(), userDetails);
+        request.setStatus(Status.TOAPPROVE);
 
-            bookingService.insBooking(request);
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+        bookingService.insBooking(request);
 
     }
     @GetMapping("all")
@@ -102,16 +95,23 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteBooking(@PathVariable("id") long id,
                               @AuthenticationPrincipal UserDetails userDetails)
-            throws ItemNotFoundException, BadRequestException {
+            throws ItemNotFoundException {
 
         BookingDTO bookingDTO = bookingService.getById(id);
         UserResponse userResponse = userService.getById(bookingDTO.getUserId());
 
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(userResponse.getUsername())) {
-            bookingService.delBooking(id);
-        }
-        else {
-            throw new BadRequestException("non hai le autorizzazioni per accedere");
-        }
+        checkAuthorities(userResponse.getUsername(), userDetails);
+
+        bookingService.delBooking(id);
+
     }
+    private void checkAuthorities(String username,
+                                  UserDetails userDetails) throws NoAuthException {
+        if (!(userDetails.getAuthorities().contains(
+                new SimpleGrantedAuthority("ROLE_ADMIN")) || userDetails.getUsername().equals(username))) {
+            throw new NoAuthException("non possiedi le autorizzazioni per effettuare questa operazione, riautenticati");
+        }
+
+    }
+
 }

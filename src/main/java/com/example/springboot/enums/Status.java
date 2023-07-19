@@ -1,4 +1,4 @@
-package com.example.springboot;
+package com.example.springboot.enums;
 
 public enum Status {
     APPROVED("Approvato"),

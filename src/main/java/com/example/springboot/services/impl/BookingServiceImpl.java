@@ -1,6 +1,5 @@
 package com.example.springboot.services.impl;
 
-import com.example.springboot.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
 import com.example.springboot.dto.mapper.BookingMapper;
