@@ -12,6 +12,7 @@ import com.example.springboot.security.config.JwtUtils;
 import com.example.springboot.services.BookingService;
 import com.example.springboot.services.UserService;
 import com.example.springboot.services.impl.JpaUserDetailsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -79,7 +80,7 @@ public class UserController {
 
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody UserRequest request,
+    public void insertUser(@Valid @RequestBody UserRequest request,
                            @AuthenticationPrincipal UserDetails userDetails) {
 
         checkAuthorities(request.getUsername(), userDetails);

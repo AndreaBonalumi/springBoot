@@ -3,6 +3,7 @@ package com.example.springboot.controllers;
 import com.example.springboot.dto.CarDTO;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.services.CarService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class CarController {
     }
     @PostMapping("insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertCar(@RequestBody CarDTO car) {
+    public void insertCar(@Valid @RequestBody CarDTO car) {
         carService.insCar(car);
     }
     @DeleteMapping("delete/{id}")

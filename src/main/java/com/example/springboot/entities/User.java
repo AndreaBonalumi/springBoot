@@ -34,7 +34,6 @@ public class User {
     private String email;
     @Column(nullable = false)
     private long createdBy;
-    @Column(unique = true)
     @Pattern(regexp = "[a-zA-Z]+", message = "la patente deve conenere solo lettere")
     private String drivingLicense;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)

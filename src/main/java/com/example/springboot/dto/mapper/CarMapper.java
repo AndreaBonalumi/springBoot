@@ -15,7 +15,7 @@ public class CarMapper {
             car.setIdCar(carRequest.getIdCar());
         }
 
-        car.setPlate(carRequest.getPlate());
+        car.setPlate(carRequest.getPlate().toUpperCase());
         car.setBrand(carRequest.getBrand());
         car.setModel(carRequest.getModel());
         car.setColor(carRequest.getColor());
