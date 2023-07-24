@@ -3,9 +3,6 @@ package com.example.springboot.dto.mapper;
 import com.example.springboot.dto.UserRequest;
 import com.example.springboot.dto.UserResponse;
 import com.example.springboot.entities.User;
-import com.example.springboot.exceptions.ItemNotFoundException;
-import com.example.springboot.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
