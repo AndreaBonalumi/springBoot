@@ -23,7 +23,7 @@ public class BookingMapper {
         booking.setDateBookingEnd(bookingDTO.getEnd());
         booking.setDateBookingStart(bookingDTO.getStart());
         booking.setStatus(bookingDTO.getStatus());
-        booking.setUser(userMapper.responseToEntity(bookingDTO.getUserId()));
+        booking.setUser(userMapper.requestToEntity(userService.getRequestFromResponse(bookingDTO.getUserId())));
         booking.setCar(carMapper.dtoToEntity(bookingDTO.getCar()));
 
         return booking;

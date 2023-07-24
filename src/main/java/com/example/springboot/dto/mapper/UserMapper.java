@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-@RequiredArgsConstructor
 public class UserMapper {
-    private final UserRepository userRepository;
     public User requestToEntity(UserRequest userRequest) {
         User user = new User();
 
@@ -30,10 +28,11 @@ public class UserMapper {
         user.setAdmin(userRequest.isAdmin());
         user.setBd(userRequest.getBirthday());
         user.setDrivingLicense(userRequest.getDrivingLicense());
-        user.setCreatedBy(userRequest.getCreatedBy());
 
         if (userRequest.getIdUser() == null) {
             user.setCreated(LocalDate.now());
+        } else {
+            user.setCreatedBy(userRequest.getCreatedBy());
         }
 
         return user;
@@ -51,8 +50,19 @@ public class UserMapper {
 
         return userResponse;
     }
-    public User responseToEntity(long id) throws ItemNotFoundException {
-        return userRepository.findByIdUser(id)
-                .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
+
+    public UserRequest entityToRequest(User user) {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setIdUser(user.getIdUser());
+        userRequest.setBirthday(user.getBd());
+        userRequest.setAdmin(user.isAdmin());
+        userRequest.setFirstName(user.getFirstName());
+        userRequest.setUsername(user.getUsername());
+        userRequest.setCreatedBy(user.getCreatedBy());
+        userRequest.setPassword(user.getPassword());
+        userRequest.setDrivingLicense(user.getDrivingLicense());
+        userRequest.setLastName(user.getLastName());
+
+        return userRequest;
     }
 }

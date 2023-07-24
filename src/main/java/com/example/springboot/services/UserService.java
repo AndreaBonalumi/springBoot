@@ -12,4 +12,5 @@ public interface UserService {
     UserResponse getByUsername(String username) throws ItemNotFoundException;
     void insUser(UserRequest userDTO);
     void delUser(long id) throws ItemNotFoundException;
+    UserRequest getRequestFromResponse(long id);
 }

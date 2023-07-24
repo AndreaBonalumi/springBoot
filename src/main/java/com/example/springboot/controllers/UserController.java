@@ -65,11 +65,11 @@ public class UserController {
 
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
-        UserResponse userResponse = userService.getById(id);
+        UserRequest userRequest = userService.getRequestFromResponse(id);
 
-        checkAuthorities(userResponse.getUsername(), userDetails);
+        checkAuthorities(userRequest.getUsername(), userDetails);
 
-        return bookingService.getByUser(userMapper.responseToEntity(id));
+        return bookingService.getByUser(userMapper.requestToEntity(userRequest));
 
     }
     @GetMapping("username")

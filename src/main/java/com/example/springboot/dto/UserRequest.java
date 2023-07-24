@@ -17,7 +17,6 @@ public class UserRequest {
     private String password;
     private String firstName;
     private String lastName;
-    private String email;
     private LocalDate birthday;
     private boolean admin = false;
     @NotBlank
