@@ -3,6 +3,7 @@ package com.example.springboot.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -23,4 +24,5 @@ public class UserRequest {
     @Pattern(regexp = "[a-zA-Z]+", message = "la patente deve contenere solo lettere")
     private String drivingLicense;
     private Long createdBy;
+    private String profilePhoto;
 }

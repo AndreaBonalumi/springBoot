@@ -19,4 +19,5 @@ public class UserResponse {
     private boolean admin;
     private String drivingLicense;
     private Long createdBy;
+    private String profilePhoto;
 }

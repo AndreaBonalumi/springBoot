@@ -29,8 +29,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDTO> getAll() {
-        log.info("***** otteniamo tutte le auto *******");
-
         return carRepository.findAll()
                 .stream().map(carMapper::entityToDto)
                 .toList();
@@ -41,7 +39,6 @@ public class CarServiceImpl implements CarService {
     }
     @Override
     public void delCar(long id) throws ItemNotFoundException {
-        log.info("********** eliminazione auto : " + id + " **********");
 
         CarDTO car = getById(id);
 

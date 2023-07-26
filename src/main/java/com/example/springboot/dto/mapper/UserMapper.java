@@ -32,6 +32,8 @@ public class UserMapper {
             user.setCreatedBy(userRequest.getCreatedBy());
         }
 
+        user.setProfilePhoto(userRequest.getProfilePhoto());
+
         return user;
     }
     public UserResponse entityToResponse(User user) {
@@ -44,6 +46,7 @@ public class UserMapper {
         userResponse.setEmail(user.getEmail());
         userResponse.setDrivingLicense(user.getDrivingLicense());
         userResponse.setCreatedBy(user.getCreatedBy());
+        userResponse.setProfilePhoto(user.getProfilePhoto());
 
         return userResponse;
     }
@@ -59,6 +62,7 @@ public class UserMapper {
         userRequest.setPassword(user.getPassword());
         userRequest.setDrivingLicense(user.getDrivingLicense());
         userRequest.setLastName(user.getLastName());
+        userRequest.setProfilePhoto(user.getProfilePhoto());
 
         return userRequest;
     }

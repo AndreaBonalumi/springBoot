@@ -10,7 +10,8 @@ public interface UserService {
     UserResponse getById(long id) throws ItemNotFoundException;
     List<UserResponse> getAll();
     UserResponse getByUsername(String username) throws ItemNotFoundException;
-    void insUser(UserRequest userDTO);
+    boolean checkAuth(String username, String password);
+    UserResponse insUser(UserRequest userDTO);
     void delUser(long id) throws ItemNotFoundException;
-    UserRequest getRequestFromResponse(long id);
+    UserRequest getRequestFromIdResponse(long id);
 }

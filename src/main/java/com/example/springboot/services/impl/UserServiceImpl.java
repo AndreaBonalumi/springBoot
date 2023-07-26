@@ -44,20 +44,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void insUser(UserRequest userDTO) {
+    public boolean checkAuth(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ItemNotFoundException("Utente non trovato"));
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    public UserResponse insUser(UserRequest userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(userMapper.requestToEntity(userDTO));
+        return userMapper.entityToResponse(userRepository.save(userMapper.requestToEntity(userDTO)));
     }
     @Override
     public void delUser(long id) throws ItemNotFoundException {
-        log.info("eliminazione user");
 
         UserResponse user = getById(id);
 
         userRepository.deleteById(user.getIdUser());
     }
     @Override
-    public UserRequest getRequestFromResponse(long id) {
+    public UserRequest getRequestFromIdResponse(long id) {
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
         return userMapper.entityToRequest(user);

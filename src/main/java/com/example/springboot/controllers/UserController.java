@@ -1,6 +1,7 @@
 package com.example.springboot.controllers;
 
 import com.example.springboot.dto.BookingDTO;
+import com.example.springboot.dto.PasswordRequest;
 import com.example.springboot.dto.UserRequest;
 import com.example.springboot.dto.UserResponse;
 import com.example.springboot.dto.mapper.UserMapper;
@@ -15,6 +16,8 @@ import com.example.springboot.services.impl.JpaUserDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +26,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +74,7 @@ public class UserController {
 
         log.info("********** get prenotazioni dell'utente: " + id + " ************");
 
-        UserRequest userRequest = userService.getRequestFromResponse(id);
+        UserRequest userRequest = userService.getRequestFromIdResponse(id);
 
         checkAuthorities(userRequest.getUsername(), userDetails);
 
@@ -80,18 +89,34 @@ public class UserController {
 
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@Valid @RequestBody UserRequest request,
+    public UserResponse insertUser(@Valid @RequestBody UserRequest request,
                            @AuthenticationPrincipal UserDetails userDetails) {
 
         checkAuthorities(request.getUsername(), userDetails);
 
-        userService.insUser(request);
+        return userService.insUser(request);
+
 
     }
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable("id") long id) throws ItemNotFoundException {
         userService.delUser(id);
+    }
+
+    @PostMapping("newPassword")
+    @ResponseStatus(HttpStatus.OK)
+    public void changePassword(@RequestBody PasswordRequest passwordRequest,
+                               @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (userService.checkAuth(userDetails.getUsername(), passwordRequest.getOldPassword())) {
+            UserRequest userRequest = userService.getRequestFromIdResponse(
+                    userService.getByUsername(userDetails.getUsername()).getIdUser());
+            userRequest.setPassword(passwordRequest.getNewPassword());
+            userService.insUser(userRequest);
+        } else {
+            throw new NoAuthException("la vecchia password non corrisponde");
+        }
     }
 
     @PostMapping("/authenticate")
@@ -112,6 +137,46 @@ public class UserController {
             return ResponseEntity.status(400).body("" + e.getMessage());
         }
     }
+    @PostMapping("/upload/{idUser}")
+    @ResponseStatus(HttpStatus.OK)
+    private void saveImageToFileSystem(@RequestParam MultipartFile file,
+                                       @PathVariable("idUser") long id,
+                                       @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+        UserRequest userRequest = userService.getRequestFromIdResponse(id);
+
+        checkAuthorities(userRequest.getUsername(), userDetails);
+
+        String uploadDir = "C:/Users/Si2001/Desktop/file";
+        String filePath = uploadDir + "/" + fileName;
+
+        file.transferTo(new File(filePath));
+
+        userRequest.setProfilePhoto(filePath);
+        userService.insUser(userRequest);
+    }
+
+    @GetMapping("image/{idUser}")
+    @ResponseStatus(HttpStatus.OK)
+    public Resource getImage(@PathVariable("idUser") long id,
+                             @AuthenticationPrincipal UserDetails userDetails) throws MalformedURLException {
+
+        UserResponse userResponse = userService.getById(id);
+
+        checkAuthorities(userResponse.getUsername(), userDetails);
+
+        Path path = Paths.get(userResponse.getProfilePhoto());
+
+        Resource resource = new UrlResource(path.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            return resource;
+        }
+        return null;
+    }
+
+
     private void checkAuthorities(String username,
                                   UserDetails userDetails) throws NoAuthException {
         if (!(userDetails.getAuthorities().contains(

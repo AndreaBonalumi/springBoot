@@ -36,6 +36,7 @@ public class User {
     private long createdBy;
     @Pattern(regexp = "[a-zA-Z]+", message = "la patente deve conenere solo lettere")
     private String drivingLicense;
+    private String profilePhoto;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     private Set<Booking> bookings = new HashSet<>();
 }

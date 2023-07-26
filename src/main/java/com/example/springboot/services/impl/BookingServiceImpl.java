@@ -51,7 +51,6 @@ public class BookingServiceImpl implements BookingService {
     }
     @Override
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
-        log.info("inserimento/modifica prenotazione");
         Booking booking = bookingMapper.dtoToEntity(bookingDTO);
 
         bookingRepository.save(booking);
@@ -59,8 +58,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void delBooking(long id) throws ItemNotFoundException {
-        log.info("eliminazione Booking");
-
         getById(id);
 
         bookingRepository.deleteById(id);
