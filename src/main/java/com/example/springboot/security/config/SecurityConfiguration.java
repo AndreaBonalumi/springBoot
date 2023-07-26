@@ -34,7 +34,6 @@ public class SecurityConfiguration {
             "/booking/all",
             "/booking/manage/**",
             "/user/filter",
-            "/user/insert",
             "/user/all",
     };
 

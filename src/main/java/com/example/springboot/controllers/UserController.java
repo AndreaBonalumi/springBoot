@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -72,8 +73,6 @@ public class UserController {
                                                @AuthenticationPrincipal UserDetails userDetails)
             throws ItemNotFoundException {
 
-        log.info("********** get prenotazioni dell'utente: " + id + " ************");
-
         UserRequest userRequest = userService.getRequestFromIdResponse(id);
 
         checkAuthorities(userRequest.getUsername(), userDetails);
@@ -90,7 +89,7 @@ public class UserController {
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse insertUser(@Valid @RequestBody UserRequest request,
-                           @AuthenticationPrincipal UserDetails userDetails) {
+                                   @AuthenticationPrincipal UserDetails userDetails) {
 
         checkAuthorities(request.getUsername(), userDetails);
 
@@ -157,9 +156,9 @@ public class UserController {
         userService.insUser(userRequest);
     }
 
-    @GetMapping("image/{idUser}")
+    @GetMapping(value = "image/{idUser}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Resource getImage(@PathVariable("idUser") long id,
+    public @ResponseBody Resource getImage(@PathVariable("idUser") long id,
                              @AuthenticationPrincipal UserDetails userDetails) throws MalformedURLException {
 
         UserResponse userResponse = userService.getById(id);
