@@ -80,9 +80,9 @@ public class UserController {
         return bookingService.getByUser(userMapper.requestToEntity(userRequest));
 
     }
-    @GetMapping("username")
+    @GetMapping("user")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getByUsername (@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
+    public UserResponse getByUser(@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
         return userService.getByUsername(userDetails.getUsername());
     }
 
