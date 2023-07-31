@@ -1,7 +1,6 @@
 package com.example.springboot.services.impl;
 
-import com.example.springboot.dto.UserRequest;
-import com.example.springboot.dto.UserResponse;
+import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.entities.User;
 import com.example.springboot.exceptions.ItemNotFoundException;
@@ -23,24 +22,33 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
     @Override
-    public UserResponse getById(long id) throws ItemNotFoundException {
+    public UserDTO getById(long id) throws ItemNotFoundException {
 
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.entityToResponse(user);
+        return userMapper.userToUserDTO(user);
     }
     @Override
-    public List<UserResponse> getAll() {
+    public List<UserDTO> getAll() {
         return userRepository.findAll()
-                .stream().map(userMapper::entityToResponse).toList();
+                .stream().map(userMapper::userToUserDTO).toList();
     }
 
     @Override
-    public UserResponse getByUsername(String username) throws ItemNotFoundException {
+    public UserDTO getByUsername(String username) throws ItemNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.entityToResponse(user);
+        return userMapper.userToUserDTO(user);
+    }
+
+    @Override
+    public void checkUser(String username, String password) throws ItemNotFoundException {
+        password = passwordEncoder.encode(password);
+
+        userRepository.findByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new ItemNotFoundException("password Errata"));
     }
 
     @Override
@@ -51,21 +59,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse insUser(UserRequest userDTO) {
+    public UserDTO insUser(UserDTO userDTO) {
+
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return userMapper.entityToResponse(userRepository.save(userMapper.requestToEntity(userDTO)));
+        return userMapper.userToUserDTO(userRepository.save(userMapper.userDTOToUser(userDTO)));
     }
     @Override
     public void delUser(long id) throws ItemNotFoundException {
 
-        UserResponse user = getById(id);
+        UserDTO user = getById(id);
 
         userRepository.deleteById(user.getIdUser());
     }
     @Override
-    public UserRequest getRequestFromIdResponse(long id) {
+    public UserDTO getRequestFromIdResponse(long id) {
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new ItemNotFoundException("utente non trovato"));
-        return userMapper.entityToRequest(user);
+        return userMapper.userToUserDTO(user);
     }
 }

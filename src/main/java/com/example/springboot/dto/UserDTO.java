@@ -2,20 +2,23 @@ package com.example.springboot.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
+@NoArgsConstructor
+public class UserDTO {
     private Long idUser;
     private String username;
     @Pattern(regexp = ".*\\d.*", message = "la password deve contenere almeno un numero")
     private String password;
+    private String email;
     private String firstName;
     private String lastName;
     private LocalDate birthday;

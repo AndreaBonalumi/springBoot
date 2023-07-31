@@ -2,8 +2,7 @@ package com.example.springboot.controllers;
 
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.PasswordRequest;
-import com.example.springboot.dto.UserRequest;
-import com.example.springboot.dto.UserResponse;
+import com.example.springboot.dto.UserDTO;
 import com.example.springboot.dto.mapper.UserMapper;
 import com.example.springboot.dto.security.AuthenticationRequest;
 import com.example.springboot.dto.security.AuthenticationResponse;
@@ -50,16 +49,16 @@ public class UserController {
     private final JwtUtils jwtUtils;
     @GetMapping(value = "all")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserResponse> allCars() {
+    public List<UserDTO> allCars() {
         return userService.getAll();
     }
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getUser(@PathVariable("id") long id,
+    public UserDTO getUser(@PathVariable("id") long id,
                                 @AuthenticationPrincipal UserDetails userDetails)
             throws ItemNotFoundException {
 
-        UserResponse userResponse = userService.getById(id);
+        UserDTO userResponse = userService.getById(id);
 
         checkAuthorities(userResponse.getUsername(), userDetails);
 
@@ -73,22 +72,22 @@ public class UserController {
                                                @AuthenticationPrincipal UserDetails userDetails)
             throws ItemNotFoundException {
 
-        UserRequest userRequest = userService.getRequestFromIdResponse(id);
+        UserDTO userRequest = userService.getRequestFromIdResponse(id);
 
         checkAuthorities(userRequest.getUsername(), userDetails);
 
-        return bookingService.getByUser(userMapper.requestToEntity(userRequest));
+        return bookingService.getByUser(userMapper.userDTOToUser(userRequest));
 
     }
     @GetMapping("user")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getByUser(@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
+    public UserDTO getByUser(@AuthenticationPrincipal UserDetails userDetails) throws ItemNotFoundException {
         return userService.getByUsername(userDetails.getUsername());
     }
 
     @PostMapping(value = "insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse insertUser(@Valid @RequestBody UserRequest request,
+    public UserDTO insertUser(@Valid @RequestBody UserDTO request,
                                    @AuthenticationPrincipal UserDetails userDetails) {
 
         checkAuthorities(request.getUsername(), userDetails);
@@ -109,7 +108,7 @@ public class UserController {
                                @AuthenticationPrincipal UserDetails userDetails) {
 
         if (userService.checkAuth(userDetails.getUsername(), passwordRequest.getOldPassword())) {
-            UserRequest userRequest = userService.getRequestFromIdResponse(
+            UserDTO userRequest = userService.getRequestFromIdResponse(
                     userService.getByUsername(userDetails.getUsername()).getIdUser());
             userRequest.setPassword(passwordRequest.getNewPassword());
             userService.insUser(userRequest);
@@ -143,7 +142,7 @@ public class UserController {
                                        @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-        UserRequest userRequest = userService.getRequestFromIdResponse(id);
+        UserDTO userRequest = userService.getRequestFromIdResponse(id);
 
         checkAuthorities(userRequest.getUsername(), userDetails);
 
@@ -161,7 +160,7 @@ public class UserController {
     public @ResponseBody Resource getImage(@PathVariable("idUser") long id,
                              @AuthenticationPrincipal UserDetails userDetails) throws MalformedURLException {
 
-        UserResponse userResponse = userService.getById(id);
+        UserDTO userResponse = userService.getById(id);
 
         checkAuthorities(userResponse.getUsername(), userDetails);
 
@@ -175,6 +174,15 @@ public class UserController {
         return null;
     }
 
+    @PostMapping("checkUser")
+    @ResponseStatus(HttpStatus.OK)
+    public void checkUser(@RequestBody AuthenticationRequest auth,
+                          @AuthenticationPrincipal UserDetails userDetails) {
+
+        checkAuthorities(auth.getUsername(), userDetails);
+
+        userService.checkUser(auth.getUsername(), auth.getPassword());
+    }
 
     private void checkAuthorities(String username,
                                   UserDetails userDetails) throws NoAuthException {

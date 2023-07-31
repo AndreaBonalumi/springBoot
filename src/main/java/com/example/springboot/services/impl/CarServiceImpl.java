@@ -24,24 +24,24 @@ public class CarServiceImpl implements CarService {
     public CarDTO getById(long id) throws ItemNotFoundException {
         Car car = carRepository.findByIdCar(id)
                 .orElseThrow(() -> new ItemNotFoundException("auto non trovata"));
-        return carMapper.entityToDto(car);
+        return carMapper.carToCarDTO(car);
     }
 
     @Override
     public List<CarDTO> getAll() {
         return carRepository.findAll()
-                .stream().map(carMapper::entityToDto)
+                .stream().map(carMapper::carToCarDTO)
                 .toList();
     }
     @Override
     public void insCar(CarDTO carDTO) {
-        carRepository.save(carMapper.dtoToEntity(carDTO));
+        carRepository.save(carMapper.carDTOToCar(carDTO));
     }
     @Override
     public void delCar(long id) throws ItemNotFoundException {
 
         CarDTO car = getById(id);
 
-        carRepository.delete(carMapper.dtoToEntity(car));
+        carRepository.delete(carMapper.carDTOToCar(car));
     }
 }

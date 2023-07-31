@@ -1,9 +1,9 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.UserDTO;
 import com.example.springboot.enums.Status;
 import com.example.springboot.dto.BookingDTO;
 import com.example.springboot.dto.CarDTO;
-import com.example.springboot.dto.UserResponse;
 import com.example.springboot.exceptions.BadRequestException;
 import com.example.springboot.exceptions.ItemNotFoundException;
 import com.example.springboot.exceptions.NoAuthException;
@@ -35,7 +35,7 @@ public class BookingController {
             throws ItemNotFoundException {
 
         BookingDTO bookingDTO = bookingService.getById(id);
-        UserResponse userResponse = userService.getById(bookingDTO.getUserId());
+        UserDTO userResponse = userService.getById(bookingDTO.getUserId());
 
         checkAuthorities(userResponse.getUsername(), userDetails);
         return bookingDTO;
@@ -47,7 +47,7 @@ public class BookingController {
                               @AuthenticationPrincipal UserDetails userDetails)
             throws ItemNotFoundException {
 
-        UserResponse userResponse = userService.getById(request.getUserId());
+        UserDTO userResponse = userService.getById(request.getUserId());
         if (request.getStart().isAfter(request.getEnd())) {
             throw new BadRequestException("errore nell'inserimento delle date");
         }
@@ -98,7 +98,7 @@ public class BookingController {
             throws ItemNotFoundException {
 
         BookingDTO bookingDTO = bookingService.getById(id);
-        UserResponse userResponse = userService.getById(bookingDTO.getUserId());
+        UserDTO userResponse = userService.getById(bookingDTO.getUserId());
 
         checkAuthorities(userResponse.getUsername(), userDetails);
 

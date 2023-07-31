@@ -28,30 +28,30 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDTO> getAll() {
         return bookingRepository.findAll()
-                .stream().map(bookingMapper::entityToDto)
+                .stream().map(bookingMapper::bookingToBookingDTO)
                 .toList();
     }
     @Override
     public BookingDTO getById(long id) throws ItemNotFoundException {
         Booking booking = bookingRepository.findByIdBooking(id)
                 .orElseThrow(() -> new ItemNotFoundException("prenotazione non trovata"));
-        return bookingMapper.entityToDto(booking);
+        return bookingMapper.bookingToBookingDTO(booking);
     }
     @Override
     public List<BookingDTO> getByUser(User user) {
         return bookingRepository.findByUser(user)
-                .stream().map(bookingMapper::entityToDto
+                .stream().map(bookingMapper::bookingToBookingDTO
                 )
                 .toList();
     }
     @Override
     public List<CarDTO> selCarsByDateBooking(LocalDate start, LocalDate end) {
         return bookingRepository.selCarsByDateBooking(start, end)
-                .stream().map(carMapper::entityToDto).toList();
+                .stream().map(carMapper::carToCarDTO).toList();
     }
     @Override
     public void insBooking(BookingDTO bookingDTO) throws ItemNotFoundException {
-        Booking booking = bookingMapper.dtoToEntity(bookingDTO);
+        Booking booking = bookingMapper.bookingDTOToBooking(bookingDTO);
 
         bookingRepository.save(booking);
     }
